@@ -2,8 +2,9 @@ package com.parkingproblem;
 
 public class ParkingLotOwner {
     private boolean isFullCapacity;
+
     public void lotCapacityIsFull() {
-         isFullCapacity = true;
+        isFullCapacity = true;
     }
 
     public boolean isCapacityFull() {

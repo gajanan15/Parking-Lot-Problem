@@ -10,7 +10,7 @@ public class ParkingLotTest {
 
     @Before
     public void setUp() throws Exception {
-        parkingLot = new ParkingLot(1);
+        parkingLot = new ParkingLot(2);
         vehicle = new Object();
     }
 
@@ -25,9 +25,8 @@ public class ParkingLotTest {
         try {
             parkingLot.parkTheVehicle(vehicle);
             parkingLot.isVehicleParked(vehicle);
-        }
-        catch (ParkingLotException e){
-            Assert.assertEquals(ParkingLotException.ExceptionType.VEHICLE_IS_ALREADY_PARK,e.type);
+        } catch (ParkingLotException e) {
+            Assert.assertEquals(ParkingLotException.ExceptionType.VEHICLE_IS_ALREADY_PARK, e.type);
         }
     }
 
@@ -46,9 +45,23 @@ public class ParkingLotTest {
         try {
             parkingLot.parkTheVehicle(vehicle);
             parkingLot.parkTheVehicle(vehicle2);
-        }catch (ParkingLotException e){
+        } catch (ParkingLotException e) {
             boolean isCapacityFull = owner.isCapacityFull();
             Assert.assertTrue(isCapacityFull);
+        }
+    }
+
+    @Test
+    public void givenParkingLot_WhenVehiclesAreParkedAndRemoveOneVehicleTheRemainingSpace_ShouldAddAnotherVehicle() {
+        Object vehicle2 = new Object();
+        Object vehicle3 = new Object();
+        try {
+            parkingLot.parkTheVehicle(vehicle);
+            parkingLot.parkTheVehicle(vehicle2);
+            parkingLot.unParkTheVehicle(vehicle);
+            boolean isParkedVehicle = parkingLot.parkTheVehicle(vehicle3);
+            Assert.assertTrue(isParkedVehicle);
+        } catch (ParkingLotException e) {
         }
     }
 }
