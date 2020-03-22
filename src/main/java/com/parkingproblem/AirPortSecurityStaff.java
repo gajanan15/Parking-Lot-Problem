@@ -1,9 +1,8 @@
 package com.parkingproblem;
 
-public class ParkingLotOwner implements ParkingLotObserver {
+public class AirPortSecurityStaff implements ParkingLotObserver {
     private boolean isFullCapacity;
 
-    @Override
     public void lotCapacityIsFull() {
         isFullCapacity = true;
     }

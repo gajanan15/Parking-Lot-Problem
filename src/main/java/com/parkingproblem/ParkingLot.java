@@ -6,18 +6,27 @@ import java.util.List;
 public class ParkingLot {
     private final int actualCapacity;
     private List vehicles;
-    public ParkingLotOwner owner;
+    private List<ParkingLotObserver> observer;
 
     public ParkingLot(int capacity) {
         vehicles = new ArrayList();
+        observer = new ArrayList();
         this.actualCapacity = capacity;
+    }
+
+    public void registredParkingLotObserver(ParkingLotObserver observer) {
+        this.observer.add(observer);
     }
 
     public boolean parkTheVehicle(Object vehicle) {
         if (this.vehicles.size() == this.actualCapacity) {
-            owner.lotCapacityIsFull();
+            for (ParkingLotObserver observer : observer) {
+                observer.lotCapacityIsFull();
+            }
             throw new ParkingLotException("No Parking Space Available!!!", ParkingLotException.ExceptionType.PARKING_IS_FULL);
         }
+        if (isVehicleParked(vehicle))
+            throw new ParkingLotException("This Vehicle Is Already Parked", ParkingLotException.ExceptionType.VEHICLE_IS_ALREADY_PARK);
         this.vehicles.add(vehicle);
         return true;
     }
@@ -32,12 +41,8 @@ public class ParkingLot {
 
     public boolean isVehicleParked(Object vehicle) {
         if (this.vehicles.contains(vehicle)) {
-            throw new ParkingLotException("This Vehicle Is Already Parked", ParkingLotException.ExceptionType.VEHICLE_IS_ALREADY_PARK);
+            return true;
         }
         return false;
-    }
-
-    public void registredOwner(ParkingLotOwner owner) {
-        this.owner = owner;
     }
 }
