@@ -49,9 +49,9 @@ public class ParkingLotTest {
             parkingLot.parkTheVehicle(vehicle2);
             parkingLot.parkTheVehicle(vehicle3);
         } catch (ParkingLotException e) {
-            boolean isCapacityFull = owner.isCapacityFull();
-            Assert.assertTrue(isCapacityFull);
         }
+        boolean isCapacityFull = owner.isCapacityFull();
+        Assert.assertTrue(isCapacityFull);
     }
 
     @Test
@@ -76,8 +76,23 @@ public class ParkingLotTest {
             parkingLot.parkTheVehicle(vehicle2);
             parkingLot.parkTheVehicle(vehicle3);
         } catch (ParkingLotException e) {
-            boolean isCapacityFull = airPortSecurity.isCapacityFull();
-            Assert.assertTrue(isCapacityFull);
         }
+        boolean isCapacityFull = airPortSecurity.isCapacityFull();
+        Assert.assertTrue(isCapacityFull);
+    }
+
+    @Test
+    public void givenParkingLot_WhenSpaceAvailable_ShouldReturnTrue() {
+        ParkingLotOwner owner = new ParkingLotOwner();
+        parkingLot.registredParkingLotObserver(owner);
+        try {
+            parkingLot.parkTheVehicle(vehicle);
+            parkingLot.parkTheVehicle(vehicle2);
+            parkingLot.parkTheVehicle(vehicle3);
+        } catch (ParkingLotException e) {
+        }
+        parkingLot.unParkTheVehicle(vehicle2);
+        boolean spaceAvailable = owner.isCapacityFull();
+        Assert.assertTrue(spaceAvailable);
     }
 }
