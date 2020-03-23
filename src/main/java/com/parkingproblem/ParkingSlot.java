@@ -1,19 +1,23 @@
 package com.parkingproblem;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ParkingSlot implements ParkingLotObserver {
     private int availableSlotNumber;
     private Object vehicle;
     private boolean slotIsFull;
-    private int slotNumber;
+    List slotNumberList;
     int slotCount;
 
     public ParkingSlot(int availableSlotNumber) {
         this.availableSlotNumber = availableSlotNumber;
+        slotNumberList = new ArrayList();
     }
 
     public void setVehicleParkingSlot(Object vehicle, int slotNumber) {
         this.vehicle = vehicle;
-        this.slotNumber = slotNumber;
+        slotNumberList.add(slotNumber);
         slotCount++;
     }
 
