@@ -7,12 +7,15 @@ public class ParkingLot {
     private final int actualCapacity;
     private List vehicles;
     List slot;
+    public VehicleClass chargeVehicle;
+    private ParkingLotOwner owner;
     private List<ParkingLotObserver> observer;
 
     public ParkingLot(int capacity) {
         vehicles = new ArrayList();
         observer = new ArrayList();
         slot = new ArrayList();
+        owner = new ParkingLotOwner();
         this.actualCapacity = capacity;
     }
 
@@ -39,6 +42,7 @@ public class ParkingLot {
 
     public boolean unParkTheVehicle(Object vehicle) {
         if (this.vehicles.contains(vehicle)) {
+            owner.infromVehicleEnterInLot();
             this.vehicles.remove(vehicle);
             return true;
         }
@@ -53,7 +57,7 @@ public class ParkingLot {
     }
 
     public boolean findVehicle(Object vehicle) {
-        if(slot.contains(vehicle))
+        if (slot.contains(vehicle))
             return true;
         throw new ParkingLotException("No Such Vehicle In Lot", ParkingLotException.ExceptionType.VEHICLE_NOT_FOUND);
     }

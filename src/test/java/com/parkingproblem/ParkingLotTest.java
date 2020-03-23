@@ -6,7 +6,7 @@ import org.junit.Test;
 
 public class ParkingLotTest {
     private static ParkingLot parkingLot;
-    private  static ParkingSlot parkingSlot;
+    private static ParkingSlot parkingSlot;
     public static Object vehicle, vehicle2, vehicle3;
 
     @Before
@@ -127,7 +127,6 @@ public class ParkingLotTest {
 
     @Test
     public void givenParkingLot_WhenParkingAttendantTheParkingLotSlotIsAvailable_ShouldReturnTrue() {
-//        ParkingSlot parkingSlot = new ParkingSlot(2);
         try {
             boolean vehicle0 = parkingLot.parkTheVehicle(vehicle);
             parkingSlot.setVehicleParkingSlot(vehicle0, 15);
@@ -139,20 +138,45 @@ public class ParkingLotTest {
 
     @Test
     public void givenParkingLot_WhenVehicleIsParked_ShouldBeAbleToFindTheVehicleAtThatSlot() {
-        try{
+        try {
             Boolean vehicle0 = parkingLot.parkTheVehicle(vehicle);
-            parkingSlot.setVehicleParkingSlot(vehicle,15);
+            parkingSlot.setVehicleParkingSlot(vehicle, 15);
             boolean findVehicle = parkingLot.findVehicle(vehicle0);
             Assert.assertTrue(findVehicle);
-        }catch (ParkingLotException e){}
+        } catch (ParkingLotException e) {
+        }
     }
 
     @Test
     public void givenParkingLot_WhenVehicleIsNotParkedAndTriedToFindVehicle_ShouldThrowException() {
-        try{
-             parkingLot.findVehicle(ParkingLotTest.vehicle);
-        }catch (ParkingLotException e){
-            Assert.assertEquals(ParkingLotException.ExceptionType.VEHICLE_NOT_FOUND,e.type);
+        try {
+            parkingLot.findVehicle(ParkingLotTest.vehicle);
+        } catch (ParkingLotException e) {
+            Assert.assertEquals(ParkingLotException.ExceptionType.VEHICLE_NOT_FOUND, e.type);
+        }
+    }
+
+    @Test
+    public void givenParkingLot_WhenVehicleIsParkedInParkingLot_ShouldLotOwnerChargeTheLotUser() {
+        ParkingLotOwner owner = new ParkingLotOwner();
+        parkingLot.registeredParkingLotObserver(owner);
+        try {
+            parkingLot.parkTheVehicle(vehicle);
+            boolean unParked = parkingLot.unParkTheVehicle(vehicle);
+            Assert.assertTrue(unParked);
+        } catch (ParkingLotException e) {
+        }
+    }
+
+    @Test
+    public void givenParkingLot_WhenVehicleIsNotParkedInParkingLot_ShouldReturnFalse() {
+        ParkingLotOwner owner = new ParkingLotOwner();
+        parkingLot.registeredParkingLotObserver(owner);
+        try {
+            parkingLot.parkTheVehicle(vehicle3);
+            parkingLot.findVehicle(vehicle);
+        } catch (ParkingLotException e) {
+            Assert.assertEquals(ParkingLotException.ExceptionType.VEHICLE_NOT_FOUND, e.type);
         }
     }
 }

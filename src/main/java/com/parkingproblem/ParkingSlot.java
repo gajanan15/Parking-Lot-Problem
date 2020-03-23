@@ -35,6 +35,11 @@ public class ParkingSlot implements ParkingLotObserver {
         return false;
     }
 
+    @Override
+    public boolean infromVehicleEnterInLot() {
+        return true;
+    }
+
     public boolean isSlotFull() {
         return this.slotIsFull;
     }
