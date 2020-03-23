@@ -95,4 +95,43 @@ public class ParkingLotTest {
         boolean spaceAvailable = owner.isCapacityFull();
         Assert.assertTrue(spaceAvailable);
     }
+
+    @Test
+    public void givenParkingLot_WhenParkingAttendantToParkACar_ShouldOwnerDecideWitchSlotParkTheCar() {
+        ParkingSlot parkingSlot = new ParkingSlot(1);
+        try {
+            parkingLot.parkTheVehicle(vehicle);
+            parkingSlot.setVehicleParkingSlot(vehicle, 2);
+            boolean vehicleParked = parkingLot.isVehicleParked(vehicle);
+            Assert.assertTrue(vehicleParked);
+        } catch (ParkingLotException e) {
+        }
+    }
+
+    @Test
+    public void givenParkingLot_WhenParkingAttendantTheParkingLotIsFull_ShouldThrowException() {
+        ParkingSlot parkingSlot = new ParkingSlot(2);
+        try {
+            parkingLot.parkTheVehicle(vehicle);
+            parkingLot.parkTheVehicle(vehicle2);
+            parkingSlot.setVehicleParkingSlot(vehicle, 5);
+            parkingSlot.setVehicleParkingSlot(vehicle2, 9);
+            boolean slotAvailable = parkingSlot.isSlotAvailable();
+            parkingLot.parkTheVehicle(vehicle3);
+        } catch (ParkingLotException e) {
+            Assert.assertEquals(ParkingLotException.ExceptionType.SLOT_IS_FULL, e.type);
+        }
+    }
+
+    @Test
+    public void givenParkingLot_WhenParkingAttendantTheParkingLotSlotIsAvailable_ShouldReturnTrue() {
+        ParkingSlot parkingSlot = new ParkingSlot(2);
+        try {
+            parkingLot.parkTheVehicle(vehicle);
+            parkingSlot.setVehicleParkingSlot(vehicle, 15);
+            boolean slotAvailable = parkingSlot.isSlotAvailable();
+            Assert.assertTrue(slotAvailable);
+        } catch (ParkingLotException e) {
+        }
+    }
 }
