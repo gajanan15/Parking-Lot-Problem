@@ -15,9 +15,12 @@ public class ParkingSlot implements ParkingLotObserver {
         slotNumberList = new ArrayList();
     }
 
-    public void setVehicleParkingSlot(Object vehicle, int slotNumber) {
+    public ParkingSlot(Object vehicle) {
         this.vehicle = vehicle;
-        slotNumberList.add(slotNumber);
+    }
+
+    public void setVehicleParkingSlot(Object vehicle) {
+        this.vehicle = vehicle;
         slotCount++;
     }
 

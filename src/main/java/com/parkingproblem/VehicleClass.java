@@ -6,7 +6,7 @@ public class VehicleClass {
 
     public int payPerUser() {
         int pay = amount;
-        System.out.println(pay);
+//        System.out.println(pay);
         return pay;
     }
 }

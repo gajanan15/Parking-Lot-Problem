@@ -18,6 +18,7 @@ public class ParkingLot {
         slot = new ArrayList();
         owner = new ParkingLotOwner();
         this.actualCapacity = capacity;
+        setCapacity(capacity);
     }
 
     public void setCapacity(int capacity) {
@@ -28,22 +29,20 @@ public class ParkingLot {
         this.observer.add(observer);
     }
 
-    public Boolean parkTheVehicle(Object vehicle) {
-        if (vehicle != null) {
-            slot.add(vehicle);
-            if (this.vehicles.size() == this.actualCapacity) {
-                for (ParkingLotObserver observer : observer) {
-                    observer.lotCapacityIsFull();
-                }
-                throw new ParkingLotException("No Parking Space Available!!!", ParkingLotException.ExceptionType.PARKING_IS_FULL);
+    public void parkTheVehicle(Object vehicle, DriverType type) {
+        slot.add(vehicle);
+        if (this.vehicles.size() == this.actualCapacity && !vehicles.contains(null)) {
+            for (ParkingLotObserver observer : observer) {
+                observer.lotCapacityIsFull();
             }
-            if (isVehicleParked(vehicle))
-                throw new ParkingLotException("This Vehicle Is Already Parked", ParkingLotException.ExceptionType.VEHICLE_IS_ALREADY_PARK);
-            this.vehicles.add(vehicle);
-            return true;
+            throw new ParkingLotException("No Parking Space Available!!!", ParkingLotException.ExceptionType.PARKING_IS_FULL);
         }
-        return true;
+        if (isVehicleParked(vehicle)) {
+            throw new ParkingLotException("This Vehicle Is Already Parked", ParkingLotException.ExceptionType.VEHICLE_IS_ALREADY_PARK);
+        }
+        this.vehicles.add(vehicle);
     }
+
 
     public boolean unParkTheVehicle(Object vehicle) {
         if (this.vehicles.contains(vehicle)) {
@@ -61,9 +60,9 @@ public class ParkingLot {
         return false;
     }
 
-    public boolean findVehicle(Object vehicle) {
+    public int findVehicle(Object vehicle) {
         if (slot.contains(vehicle))
-            return true;
+            return this.vehicles.indexOf(vehicle);
         throw new ParkingLotException("No Such Vehicle In Lot", ParkingLotException.ExceptionType.VEHICLE_NOT_FOUND);
     }
 
