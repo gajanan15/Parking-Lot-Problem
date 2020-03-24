@@ -179,4 +179,20 @@ public class ParkingLotTest {
             Assert.assertEquals(ParkingLotException.ExceptionType.VEHICLE_NOT_FOUND, e.type);
         }
     }
+
+    @Test
+    public void givenParkingLot_WhenMultipleVehicles_ShouldParkEvenly() {
+        parkingLot.setCapacity(5);
+        try {
+            parkingLot.parkTheVehicle(vehicle);
+            parkingLot.parkTheVehicle(vehicle2);
+            parkingLot.parkTheVehicle(vehicle3);
+            parkingLot.parkTheVehicle(new Object());
+            parkingLot.unParkTheVehicle(vehicle);
+            parkingLot.parkTheVehicle(new Object());
+            Object emptySlotPosition = parkingLot.getEmptyParkingSlot().get(0);
+            Assert.assertEquals(0, emptySlotPosition);
+        } catch (ParkingLotException e) {
+        }
+    }
 }

@@ -2,9 +2,10 @@ package com.parkingproblem;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.IntStream;
 
 public class ParkingLot {
-    private final int actualCapacity;
+    private int actualCapacity;
     private List vehicles;
     List slot;
     public VehicleClass chargeVehicle;
@@ -16,6 +17,10 @@ public class ParkingLot {
         observer = new ArrayList();
         slot = new ArrayList();
         owner = new ParkingLotOwner();
+        this.actualCapacity = capacity;
+    }
+
+    public void setCapacity(int capacity) {
         this.actualCapacity = capacity;
     }
 
@@ -43,7 +48,7 @@ public class ParkingLot {
     public boolean unParkTheVehicle(Object vehicle) {
         if (this.vehicles.contains(vehicle)) {
             owner.infromVehicleEnterInLot();
-            this.vehicles.remove(vehicle);
+            this.vehicles.set(this.vehicles.indexOf(vehicle), null);
             return true;
         }
         return false;
@@ -60,5 +65,11 @@ public class ParkingLot {
         if (slot.contains(vehicle))
             return true;
         throw new ParkingLotException("No Such Vehicle In Lot", ParkingLotException.ExceptionType.VEHICLE_NOT_FOUND);
+    }
+
+    public ArrayList getEmptyParkingSlot() {
+        ArrayList<Integer> emptyParkingSlots = new ArrayList();
+        IntStream.range(0, this.actualCapacity).filter(slot -> vehicles.get(slot) == null).forEach(slot -> emptyParkingSlots.add(slot));
+        return emptyParkingSlots;
     }
 }
