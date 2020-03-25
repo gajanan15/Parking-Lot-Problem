@@ -4,6 +4,8 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import static org.junit.Assert.assertEquals;
+
 public class ParkingLotTest {
     private static ParkingLot parkingLot;
     private static ParkingSlot parkingSlot;
@@ -170,6 +172,25 @@ public class ParkingLotTest {
             boolean unParked = parkingLot.unParkTheVehicle(vehicle);
             Assert.assertTrue(unParked);
         } catch (ParkingLotException e) {
+        }
+    }
+
+    @Test
+    public void givenParkingLot_WhenVehicleParkedTimeIsSet_ShouldReturnParkingTime() {
+        VehicleClass vehicleClass = new VehicleClass();
+        boolean parkingTime = parkingLot.parkTheVehicle(vehicle, DriverType.NORMAL);
+        boolean checkTime = vehicleClass.timeCheck(parkingTime);
+        assertEquals(parkingTime, checkTime);
+    }
+
+    @Test
+    public void givenParkingLot_WhenParticularTimePeriodVehicleNotParked_ShouldThrowException() {
+        VehicleClass vehicleClass = new VehicleClass();
+        try {
+            parkingLot.parkTheVehicle(null,DriverType.NORMAL);
+            boolean time = vehicleClass.timeCheck(null);
+        }catch (ParkingLotException e){
+            Assert.assertEquals(ParkingLotException.ExceptionType.VEHICLE_NOT_FOUND,e.type);
         }
     }
 

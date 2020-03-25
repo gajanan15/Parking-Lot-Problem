@@ -5,16 +5,16 @@ import java.util.List;
 import java.util.stream.IntStream;
 
 public class ParkingLot {
+    ParkingLotOwner owner = new ParkingLotOwner();
     private int actualCapacity;
     private List vehicles;
     List slot;
-    public VehicleClass chargeVehicle;
-    private ParkingLotOwner owner;
+    VehicleClass chargeVehicle = new VehicleClass();
     private List<ParkingLotObserver> observer;
 
     public ParkingLot(int capacity) {
         vehicles = new ArrayList();
-        observer = new ArrayList();
+        this.observer = new ArrayList();
         slot = new ArrayList();
         owner = new ParkingLotOwner();
         this.actualCapacity = capacity;
@@ -29,18 +29,22 @@ public class ParkingLot {
         this.observer.add(observer);
     }
 
-    public void parkTheVehicle(Object vehicle, DriverType type) {
-        slot.add(vehicle);
-        if (this.vehicles.size() == this.actualCapacity && !vehicles.contains(null)) {
-            for (ParkingLotObserver observer : observer) {
-                observer.lotCapacityIsFull();
+    public boolean parkTheVehicle(Object vehicle, DriverType type) {
+        if (vehicle != null) {
+            slot.add(vehicle);
+            if (this.vehicles.size() == this.actualCapacity && !vehicles.contains(null)) {
+                for (ParkingLotObserver observer : observer) {
+                    observer.lotCapacityIsFull();
+                }
+                throw new ParkingLotException("No Parking Space Available!!!", ParkingLotException.ExceptionType.PARKING_IS_FULL);
             }
-            throw new ParkingLotException("No Parking Space Available!!!", ParkingLotException.ExceptionType.PARKING_IS_FULL);
+            if (isVehicleParked(vehicle)) {
+                throw new ParkingLotException("This Vehicle Is Already Parked", ParkingLotException.ExceptionType.VEHICLE_IS_ALREADY_PARK);
+            }
+            this.vehicles.add(vehicle);
+            return true;
         }
-        if (isVehicleParked(vehicle)) {
-            throw new ParkingLotException("This Vehicle Is Already Parked", ParkingLotException.ExceptionType.VEHICLE_IS_ALREADY_PARK);
-        }
-        this.vehicles.add(vehicle);
+        return false;
     }
 
 

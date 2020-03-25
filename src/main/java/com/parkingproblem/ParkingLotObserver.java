@@ -6,4 +6,8 @@ public interface ParkingLotObserver {
     boolean isSpaceAvailable();
 
     boolean infromVehicleEnterInLot();
+
+    void setParkingTime(int time);
+
+    int getParkingTime();
 }

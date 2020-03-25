@@ -43,6 +43,16 @@ public class ParkingSlot implements ParkingLotObserver {
         return true;
     }
 
+    @Override
+    public void setParkingTime(int time) {
+
+    }
+
+    @Override
+    public int getParkingTime() {
+        return 0;
+    }
+
     public boolean isSlotFull() {
         return this.slotIsFull;
     }
