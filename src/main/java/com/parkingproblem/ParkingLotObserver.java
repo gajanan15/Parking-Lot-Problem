@@ -7,7 +7,4 @@ public interface ParkingLotObserver {
 
     boolean infromVehicleEnterInLot();
 
-    void setParkingTime(int time);
-
-    int getParkingTime();
 }

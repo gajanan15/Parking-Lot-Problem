@@ -56,9 +56,9 @@ public class ParkingLotTest {
             parkingLot.parkTheVehicle(vehicle2, DriverType.NORMAL);
             parkingLot.parkTheVehicle(vehicle3, DriverType.NORMAL);
         } catch (ParkingLotException e) {
+            boolean isCapacityFull = owner.isCapacityFull();
+            Assert.assertTrue(isCapacityFull);
         }
-        boolean isCapacityFull = owner.isCapacityFull();
-        Assert.assertTrue(isCapacityFull);
     }
 
     @Test
@@ -84,24 +84,23 @@ public class ParkingLotTest {
             parkingLot.parkTheVehicle(vehicle2, DriverType.NORMAL);
             parkingLot.parkTheVehicle(vehicle3, DriverType.NORMAL);
         } catch (ParkingLotException e) {
+            boolean isCapacityFull = airPortSecurity.isCapacityFull();
+            Assert.assertTrue(isCapacityFull);
         }
-        boolean isCapacityFull = airPortSecurity.isCapacityFull();
-        Assert.assertTrue(isCapacityFull);
     }
 
     @Test
-    public void givenParkingLot_WhenSpaceAvailable_ShouldReturnTrue() {
+    public void givenParkingLot_WhenSpaceAvailable_ShouldReturnFalse() {
         ParkingLotOwner owner = new ParkingLotOwner();
         parkingLot.registeredParkingLotObserver(owner);
         try {
             parkingLot.parkTheVehicle(vehicle, DriverType.NORMAL);
             parkingLot.parkTheVehicle(vehicle2, DriverType.NORMAL);
-            parkingLot.parkTheVehicle(vehicle3, DriverType.NORMAL);
         } catch (ParkingLotException e) {
         }
         parkingLot.unParkTheVehicle(vehicle2);
         boolean spaceAvailable = owner.isCapacityFull();
-        Assert.assertTrue(spaceAvailable);
+        Assert.assertFalse(spaceAvailable);
     }
 
     //UC6
@@ -148,7 +147,7 @@ public class ParkingLotTest {
             parkingLot.parkTheVehicle(vehicle, DriverType.NORMAL);
             parkingSlot.setVehicleParkingSlot(vehicle);
             int findVehicle = parkingLot.findVehicle(vehicle);
-            Assert.assertEquals(0, findVehicle);
+            Assert.assertEquals(1, findVehicle);
         } catch (ParkingLotException e) {
         }
     }
@@ -187,10 +186,10 @@ public class ParkingLotTest {
     public void givenParkingLot_WhenParticularTimePeriodVehicleNotParked_ShouldThrowException() {
         VehicleClass vehicleClass = new VehicleClass();
         try {
-            parkingLot.parkTheVehicle(null,DriverType.NORMAL);
+            parkingLot.parkTheVehicle(null, DriverType.NORMAL);
             boolean time = vehicleClass.timeCheck(null);
-        }catch (ParkingLotException e){
-            Assert.assertEquals(ParkingLotException.ExceptionType.VEHICLE_NOT_FOUND,e.type);
+        } catch (ParkingLotException e) {
+            Assert.assertEquals(ParkingLotException.ExceptionType.VEHICLE_NOT_FOUND, e.type);
         }
     }
 
@@ -218,7 +217,7 @@ public class ParkingLotTest {
             parkingLot.unParkTheVehicle(vehicle3);
             parkingLot.parkTheVehicle(vehicle5, DriverType.NORMAL);
             Object emptySlotPosition = parkingLot.getEmptyParkingSlot().get(0);
-            Assert.assertEquals(2, emptySlotPosition);
+            Assert.assertEquals(0, emptySlotPosition);
         } catch (ParkingLotException e) {
         }
     }
@@ -234,7 +233,7 @@ public class ParkingLotTest {
             parkingLot.unParkTheVehicle(vehicle2);
             parkingLot.parkTheVehicle(vehicle4, DriverType.HANDICAP);
             int findVehiclePosition = parkingLot.findVehicle(vehicle4);
-            Assert.assertEquals(3, findVehiclePosition);
+            Assert.assertEquals(1, findVehiclePosition);
         } catch (ParkingLotException e) {
         }
     }

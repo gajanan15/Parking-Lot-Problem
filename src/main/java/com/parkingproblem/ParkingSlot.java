@@ -1,5 +1,6 @@
 package com.parkingproblem;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,6 +10,7 @@ public class ParkingSlot implements ParkingLotObserver {
     private boolean slotIsFull;
     List slotNumberList;
     int slotCount;
+    private LocalDateTime time;
 
     public ParkingSlot(int availableSlotNumber) {
         this.availableSlotNumber = availableSlotNumber;
@@ -28,6 +30,20 @@ public class ParkingSlot implements ParkingLotObserver {
         return availableSlotNumber;
     }
 
+    public void setParkingTimeOfVehicle(Object vehicle) {
+        this.vehicle = vehicle;
+        this.time = LocalDateTime.now();
+
+    }
+
+    public Object getVehicle() {
+        return vehicle;
+    }
+
+    public LocalDateTime getTimeOfParking() {
+        return time;
+    }
+
     @Override
     public void lotCapacityIsFull() {
         slotIsFull = true;
@@ -41,16 +57,6 @@ public class ParkingSlot implements ParkingLotObserver {
     @Override
     public boolean infromVehicleEnterInLot() {
         return true;
-    }
-
-    @Override
-    public void setParkingTime(int time) {
-
-    }
-
-    @Override
-    public int getParkingTime() {
-        return 0;
     }
 
     public boolean isSlotFull() {

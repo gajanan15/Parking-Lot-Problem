@@ -7,7 +7,6 @@ public class ParkingLotOwner implements ParkingLotObserver {
     private boolean isFullCapacity;
     List vehicleEntered;
     VehicleClass vehicleClass = new VehicleClass();
-    private int parkingTime;
 
     public ParkingLotOwner() {
         vehicleEntered = new ArrayList();
@@ -30,15 +29,5 @@ public class ParkingLotOwner implements ParkingLotObserver {
     public boolean infromVehicleEnterInLot() {
         vehicleClass.payPerUser();
         return true;
-    }
-
-    @Override
-    public void setParkingTime(int parkingTime) {
-        this.parkingTime=parkingTime;
-    }
-
-    @Override
-    public int getParkingTime() {
-        return parkingTime;
     }
 }
