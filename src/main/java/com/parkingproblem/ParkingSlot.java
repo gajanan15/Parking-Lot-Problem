@@ -8,17 +8,14 @@ public class ParkingSlot implements ParkingLotObserver {
     private int availableSlotNumber;
     private Object vehicle;
     private boolean slotIsFull;
+    private boolean isSpaceAvailable;
     List slotNumberList;
     int slotCount;
-    private LocalDateTime time;
+    private LocalDateTime parkingTime;
 
     public ParkingSlot(int availableSlotNumber) {
         this.availableSlotNumber = availableSlotNumber;
         slotNumberList = new ArrayList();
-    }
-
-    public ParkingSlot(Object vehicle) {
-        this.vehicle = vehicle;
     }
 
     public void setVehicleParkingSlot(Object vehicle) {
@@ -26,22 +23,13 @@ public class ParkingSlot implements ParkingLotObserver {
         slotCount++;
     }
 
-    public int slotNumberIsAvailable(int availableSlotNumber) {
-        return availableSlotNumber;
+    public LocalDateTime getParkingTime() {
+        return parkingTime;
     }
 
-    public void setParkingTimeOfVehicle(Object vehicle) {
+    public void setVehicleAndTime(Object vehicle) {
         this.vehicle = vehicle;
-        this.time = LocalDateTime.now();
-
-    }
-
-    public Object getVehicle() {
-        return vehicle;
-    }
-
-    public LocalDateTime getTimeOfParking() {
-        return time;
+        this.parkingTime = LocalDateTime.now();
     }
 
     @Override
@@ -50,17 +38,8 @@ public class ParkingSlot implements ParkingLotObserver {
     }
 
     @Override
-    public boolean isSpaceAvailable() {
-        return false;
-    }
-
-    @Override
-    public boolean infromVehicleEnterInLot() {
-        return true;
-    }
-
-    public boolean isSlotFull() {
-        return this.slotIsFull;
+    public void lotSpaceAvailable() {
+        isSpaceAvailable = true;
     }
 
     public boolean isSlotAvailable() {

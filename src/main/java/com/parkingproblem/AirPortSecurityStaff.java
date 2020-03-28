@@ -2,19 +2,19 @@ package com.parkingproblem;
 
 public class AirPortSecurityStaff implements ParkingLotObserver {
     private boolean isFullCapacity;
+    private boolean isSpaceAvailable;
 
     public void lotCapacityIsFull() {
         isFullCapacity = true;
     }
 
     @Override
-    public boolean isSpaceAvailable() {
-        return false;
+    public void lotSpaceAvailable() {
+        isSpaceAvailable = true;
     }
 
-    @Override
-    public boolean infromVehicleEnterInLot() {
-        return true;
+    public boolean isSpaceAvailable() {
+        return this.isSpaceAvailable;
     }
 
     public boolean isCapacityFull() {

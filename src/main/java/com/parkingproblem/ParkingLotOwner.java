@@ -5,8 +5,8 @@ import java.util.List;
 
 public class ParkingLotOwner implements ParkingLotObserver {
     private boolean isFullCapacity;
+    private boolean isSpaceAvailable;
     List vehicleEntered;
-    VehicleClass vehicleClass = new VehicleClass();
 
     public ParkingLotOwner() {
         vehicleEntered = new ArrayList();
@@ -18,16 +18,15 @@ public class ParkingLotOwner implements ParkingLotObserver {
     }
 
     @Override
+    public void lotSpaceAvailable() {
+        isSpaceAvailable = true;
+    }
+
     public boolean isSpaceAvailable() {
-        return false;
+        return this.isSpaceAvailable;
     }
 
     public boolean isCapacityFull() {
         return this.isFullCapacity;
-    }
-
-    public boolean infromVehicleEnterInLot() {
-        vehicleClass.payPerUser();
-        return true;
     }
 }

@@ -9,6 +9,7 @@ public class ParkingLot {
     ParkingLotOwner owner;
     private int actualCapacity;
     private List vehicles;
+    public int autoParkingLocation;
     private List<ParkingLotObserver> observer;
 
     public ParkingLot(int capacity) {
@@ -30,7 +31,7 @@ public class ParkingLot {
     }
 
     public void registeredParkingLotObserver(ParkingLotObserver observer) {
-        this.observer.add(observer);
+         this.observer.add(observer);
     }
 
     public boolean parkTheVehicle(Object vehicle, DriverType type) {
@@ -44,22 +45,22 @@ public class ParkingLot {
             if (isVehicleParked(vehicle)) {
                 throw new ParkingLotException("This Vehicle Is Already Parked", ParkingLotException.ExceptionType.VEHICLE_IS_ALREADY_PARK);
             }
-            getAutoParkingLocation(vehicle, type);
+            setParkingLocation(vehicle, type);
             return true;
         }
         return false;
     }
 
-    public void getAutoParkingLocation(Object vehicle, DriverType type) {
-        int autoParkingLocation = (int) parkingAttender(type).get(0);
+    public void setParkingLocation(Object vehicle, DriverType type) {
+        autoParkingLocation = (int) parkingLotAttender(type).get(0);
         this.vehicles.set(autoParkingLocation, vehicle);
     }
 
-    public List parkingAttender(DriverType driverType) {
+    public List parkingLotAttender(DriverType type) {
         List emptyParkingSlotList = getEmptyParkingSlot();
-        if (DriverType.HANDICAP.equals(driverType))
+        if (DriverType.HANDICAP.equals(type))
             Collections.sort(emptyParkingSlotList);
-        else if (DriverType.NORMAL.equals(driverType))
+        else if (DriverType.NORMAL.equals(type))
             Collections.sort(emptyParkingSlotList, Collections.reverseOrder());
         return emptyParkingSlotList;
     }
@@ -67,7 +68,6 @@ public class ParkingLot {
 
     public boolean unParkTheVehicle(Object vehicle) {
         if (this.vehicles.contains(vehicle)) {
-            owner.infromVehicleEnterInLot();
             this.vehicles.set(this.vehicles.indexOf(vehicle), null);
             return true;
         }
