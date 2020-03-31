@@ -1,28 +1,31 @@
 package com.parkingproblem;
 
+import com.parkingproblem.enums.DriverType;
+import com.parkingproblem.exceptions.ParkingLotException;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.time.LocalDateTime;
-import java.util.List;
+
+import static org.junit.Assert.assertEquals;
 
 public class ParkingLotTest {
     private static ParkingLot parkingLot;
-    private static ParkingLot parkingLot1;
-    private static ParkingSlot parkingSlot;
-    public static Object vehicle, vehicle2, vehicle3, vehicle4, vehicle5;
+    private static ParkingLotsSystem parkingLotsSystem;
+    private static ParkingLotOwner owner;
+    private static AirPortSecurityStaff airPortSecurity;
+    public static Object vehicle;
 
     @Before
     public void setUp() throws Exception {
         parkingLot = new ParkingLot(2);
-        parkingLot1 = new ParkingLot(5);
-        parkingSlot = new ParkingSlot(2);
+        parkingLotsSystem = new ParkingLotsSystem();
+        parkingLotsSystem.addLot(parkingLot);
+        owner = new ParkingLotOwner();
+        parkingLotsSystem.registerParkingLots(owner);
+        airPortSecurity = new AirPortSecurityStaff();
         vehicle = new Object();
-        vehicle2 = new Object();
-        vehicle3 = new Object();
-        vehicle4 = new Object();
-        vehicle5 = new Object();
     }
 
     @Test
@@ -49,11 +52,20 @@ public class ParkingLotTest {
         Assert.assertTrue(isUnparked);
     }
 
+    @Test
+    public void givenParkingLot_WhenVehicleIsNotParked_ShouldThrowVehicleNotFoundException() {
+        try {
+            parkingLot.unParkTheVehicle(vehicle);
+        } catch (ParkingLotException e) {
+            assertEquals(ParkingLotException.ExceptionType.VEHICLE_NOT_FOUND, e.type);
+        }
+    }
+
     //Parking-Lot Owner
     @Test
     public void givenParkingLot_WhenFull_ShouldInfromTheOwner() {
-        ParkingLotOwner owner = new ParkingLotOwner();
-        parkingLot.registeredParkingLotObserver(owner);
+        Object vehicle2 = new Object();
+        Object vehicle3 = new Object();
         try {
             parkingLot.parkTheVehicle(vehicle, DriverType.NORMAL);
             parkingLot.parkTheVehicle(vehicle2, DriverType.NORMAL);
@@ -66,6 +78,8 @@ public class ParkingLotTest {
 
     @Test
     public void givenParkingLot_WhenVehiclesAreParkedAndRemoveOneVehicleTheRemainingSpace_ShouldAddAnotherVehicle() {
+        Object vehicle2 = new Object();
+        Object vehicle3 = new Object();
         try {
             parkingLot.parkTheVehicle(vehicle, DriverType.NORMAL);
             parkingLot.parkTheVehicle(vehicle2, DriverType.NORMAL);
@@ -74,14 +88,16 @@ public class ParkingLotTest {
             boolean isParkedVehicle = parkingLot.isVehicleParked(vehicle3);
             Assert.assertTrue(isParkedVehicle);
         } catch (ParkingLotException e) {
+            Assert.assertEquals(ParkingLotException.ExceptionType.PARKING_IS_FULL, e.type);
         }
     }
 
     //AirPort Security-Staff
     @Test
     public void givenParkingLot_WhenLotIsFull_ShouldInfromAirPortSecurityStaff() {
-        AirPortSecurityStaff airPortSecurity = new AirPortSecurityStaff();
-        parkingLot.registeredParkingLotObserver(airPortSecurity);
+        parkingLotsSystem.registerParkingLots(airPortSecurity);
+        Object vehicle2 = new Object();
+        Object vehicle3 = new Object();
         try {
             parkingLot.parkTheVehicle(vehicle, DriverType.NORMAL);
             parkingLot.parkTheVehicle(vehicle2, DriverType.NORMAL);
@@ -94,21 +110,18 @@ public class ParkingLotTest {
 
     @Test
     public void givenParkingLot_WhenSpaceAvailable_ShouldReturnFalse() {
-        ParkingLotOwner owner = new ParkingLotOwner();
-        parkingLot.registeredParkingLotObserver(owner);
-        try {
-            parkingLot.parkTheVehicle(vehicle, DriverType.NORMAL);
-            parkingLot.parkTheVehicle(vehicle2, DriverType.NORMAL);
-        } catch (ParkingLotException e) {
-        }
+        Object vehicle2 = new Object();
+        parkingLot.parkTheVehicle(vehicle, DriverType.NORMAL);
+        parkingLot.parkTheVehicle(vehicle2, DriverType.NORMAL);
         parkingLot.unParkTheVehicle(vehicle2);
-        boolean spaceAvailable = owner.isCapacityFull();
+        boolean spaceAvailable = owner.isSpaceAvailable();
         Assert.assertFalse(spaceAvailable);
     }
 
     //UC6
     @Test
     public void givenParkingLot_WhenParkingAttendantToParkACar_ShouldOwnerDecideWitchSlotParkTheCar() {
+        ParkingSlot parkingSlot = new ParkingSlot(vehicle);
         try {
             parkingLot.setCapacity(3);
             parkingLot.parkTheVehicle(vehicle, DriverType.NORMAL);
@@ -116,30 +129,30 @@ public class ParkingLotTest {
             int locationParkedVehicle = parkingLot.autoParkingLocation;
             Assert.assertEquals(2, locationParkedVehicle);
         } catch (ParkingLotException e) {
+            Assert.assertEquals(ParkingLotException.ExceptionType.PARKING_IS_FULL, e.type);
         }
     }
 
     @Test
     public void givenParkingLot_WhenParkingAttendantTheParkingLotIsFull_ShouldThrowException() {
+        Object vehicle2 = new Object();
+        Object vehicle3 = new Object();
         try {
-            parkingSlot.setVehicleParkingSlot(vehicle);
-            parkingSlot.setVehicleParkingSlot(vehicle2);
-            boolean slotAvailable = parkingSlot.isSlotAvailable();
+            parkingLot.parkTheVehicle(vehicle, DriverType.NORMAL);
+            parkingLot.parkTheVehicle(vehicle2, DriverType.NORMAL);
+            owner.isCapacityFull();
             parkingLot.parkTheVehicle(vehicle3, DriverType.NORMAL);
         } catch (ParkingLotException e) {
-            Assert.assertEquals(ParkingLotException.ExceptionType.SLOT_IS_FULL, e.type);
+            Assert.assertEquals(ParkingLotException.ExceptionType.PARKING_IS_FULL, e.type);
         }
     }
 
     @Test
-    public void givenParkingLot_WhenParkingAttendantTheParkingLotSlotIsAvailable_ShouldReturnTrue() {
-        try {
-            parkingLot.parkTheVehicle(vehicle, DriverType.NORMAL);
-            parkingSlot.setVehicleParkingSlot(vehicle);
-            boolean slotAvailable = parkingSlot.isSlotAvailable();
-            Assert.assertTrue(slotAvailable);
-        } catch (ParkingLotException e) {
-        }
+    public void givenParkingLot_WhenParkingAttendantTheParkingLotIsAvailable_ShouldReturnFalse() {
+        parkingLot.setCapacity(1);
+        parkingLot.parkTheVehicle(vehicle, DriverType.NORMAL);
+        boolean spaceAvailable = owner.isSpaceAvailable();
+        Assert.assertFalse(spaceAvailable);
     }
 
     //UC7
@@ -147,10 +160,21 @@ public class ParkingLotTest {
     public void givenParkingLot_WhenVehicleIsParked_ShouldBeAbleToFindTheVehicleAtThatSlot() {
         try {
             parkingLot.parkTheVehicle(vehicle, DriverType.NORMAL);
-            parkingSlot.setVehicleParkingSlot(vehicle);
             int findVehicle = parkingLot.findVehicle(vehicle);
             Assert.assertEquals(1, findVehicle);
         } catch (ParkingLotException e) {
+            Assert.assertEquals(ParkingLotException.ExceptionType.VEHICLE_NOT_FOUND, e.type);
+        }
+    }
+
+    @Test
+    public void givenParkingLot_WhenVehicleIsParkedButFindAnotherVehicle_ShouldThrowException() {
+        try {
+            parkingLot.parkTheVehicle(vehicle, DriverType.NORMAL);
+            int findVehicle = parkingLot.findVehicle(new Object());
+            Assert.assertEquals(1, findVehicle);
+        } catch (ParkingLotException e) {
+            Assert.assertEquals(ParkingLotException.ExceptionType.VEHICLE_NOT_FOUND, e.type);
         }
     }
 
@@ -167,18 +191,18 @@ public class ParkingLotTest {
 
     @Test
     public void givenParkingLot_WhenVehicleParked_ShouldSetParkingTime() {
+        ParkingSlot parkingSlot = new ParkingSlot(vehicle);
         LocalDateTime expectedParkingTime = LocalDateTime.now();
-        Object vehicle = new Object();
         parkingSlot.setVehicleAndTime(vehicle);
-        Assert.assertEquals(expectedParkingTime, parkingSlot.getParkingTime());
+        LocalDateTime vehicleParkingTime = parkingSlot.getParkingTime();
+        Assert.assertEquals(expectedParkingTime, vehicleParkingTime);
     }
 
     @Test
-    public void givenParkingLot_WhenVehicleIsNotParkedInParkingLot_ShouldReturnThrowException() {
-        ParkingLotOwner owner = new ParkingLotOwner();
-        parkingLot.registeredParkingLotObserver(owner);
+    public void givenParkingLot_WhenVehicleIsNotParkedInParkingLot_ShouldThrowException() {
+        Object vehicle2 = new Object();
         try {
-            parkingLot.parkTheVehicle(vehicle3, DriverType.NORMAL);
+            parkingLot.parkTheVehicle(vehicle2, DriverType.NORMAL);
             parkingLot.findVehicle(vehicle);
         } catch (ParkingLotException e) {
             Assert.assertEquals(ParkingLotException.ExceptionType.VEHICLE_NOT_FOUND, e.type);
@@ -189,42 +213,42 @@ public class ParkingLotTest {
 
     @Test
     public void givenParkingLot_WhenMultipleVehiclesParked_ShouldParkEvenly() {
-        parkingLot.setCapacity(5);
-        Lots lots = new Lots();
-        lots.addLot(parkingLot);
-
+        parkingLot.setCapacity(2);
+        ParkingLot parkingLot1 = new ParkingLot(3);
         parkingLot1.setCapacity(2);
-        lots.addLot(parkingLot1);
+        parkingLotsSystem.addLot(parkingLot1);
+        Object vehicle2 = new Object();
+        Object vehicle3 = new Object();
+        Object vehicle4 = new Object();
         try {
-            boolean parkedVehicle1 = parkingLot.parkTheVehicle(ParkingLotTest.vehicle, DriverType.NORMAL);
-            boolean parkedVehicle2 = parkingLot.parkTheVehicle(vehicle2, DriverType.NORMAL);
-            boolean parkedVehicle3 = parkingLot1.parkTheVehicle(vehicle3, DriverType.NORMAL);
-            boolean parkedVehicle4 = parkingLot1.parkTheVehicle(vehicle4, DriverType.NORMAL);
+            boolean parkedVehicle1 = parkingLotsSystem.parkVehicle(ParkingLotTest.vehicle, DriverType.NORMAL);
+            boolean parkedVehicle2 = parkingLotsSystem.parkVehicle(vehicle2, DriverType.NORMAL);
+            boolean parkedVehicle3 = parkingLotsSystem.parkVehicle(vehicle3, DriverType.NORMAL);
+            boolean parkedVehicle4 = parkingLotsSystem.parkVehicle(vehicle4, DriverType.NORMAL);
             Assert.assertTrue(parkedVehicle1 && parkedVehicle2 && parkedVehicle3 && parkedVehicle4);
         } catch (ParkingLotException e) {
         }
     }
 
     @Test
-    public void givenParkingLot_WhenAnyLotIsFull_ShouldReturnTrue() {
-        ParkingLotOwner owner = new ParkingLotOwner();
-        parkingLot.registeredParkingLotObserver(owner);
+    public void givenParkingLotCheckCapacity_WhenLotIsFull_ShouldReturnTrue() {
+        parkingLot.setCapacity(3);
 
-        parkingLot.setCapacity(5);
-        Lots lots = new Lots();
-        lots.addLot(parkingLot);
-
+        ParkingLot parkingLot1 = new ParkingLot(3);
         parkingLot1.setCapacity(2);
-        parkingLot1.registeredParkingLotObserver(owner);
-        lots.addLot(parkingLot1);
-
+        parkingLotsSystem.addLot(parkingLot1);
+        parkingLotsSystem.registerParkingLots(owner);
+        Object vehicle2 = new Object();
+        Object vehicle3 = new Object();
+        Object vehicle4 = new Object();
+        Object vehicle5 = new Object();
         try {
-            parkingLot.parkTheVehicle(vehicle, DriverType.NORMAL);
-            parkingLot1.parkTheVehicle(vehicle2, DriverType.NORMAL);
-            parkingLot1.parkTheVehicle(vehicle3, DriverType.NORMAL);
-            parkingLot.parkTheVehicle(vehicle4, DriverType.NORMAL);
-            parkingLot.parkTheVehicle(new Object(), DriverType.NORMAL);
-            parkingLot1.parkTheVehicle(vehicle5, DriverType.NORMAL);
+            parkingLotsSystem.parkVehicle(vehicle, DriverType.NORMAL);
+            parkingLotsSystem.parkVehicle(vehicle2, DriverType.NORMAL);
+            parkingLotsSystem.parkVehicle(vehicle3, DriverType.NORMAL);
+            parkingLotsSystem.parkVehicle(vehicle4, DriverType.NORMAL);
+            parkingLotsSystem.parkVehicle(new Object(), DriverType.NORMAL);
+            parkingLotsSystem.parkVehicle(vehicle5, DriverType.NORMAL);
         } catch (ParkingLotException e) {
             boolean capacityFull = owner.isCapacityFull();
             Assert.assertTrue(capacityFull);
@@ -234,38 +258,64 @@ public class ParkingLotTest {
     @Test
     public void givenParkingLot_WhenVehiclesParkedEvenlyIfVehicleUnparkedAndAnotherVehicleParked_ShouldReturnParkedVehicleSlotNumber() {
         parkingLot.setCapacity(5);
-        Lots lots = new Lots();
-        lots.addLot(parkingLot);
 
+        ParkingLot parkingLot1 = new ParkingLot(2);
         parkingLot1.setCapacity(2);
-        lots.addLot(parkingLot1);
+        parkingLotsSystem.addLot(parkingLot1);
+        Object vehicle2 = new Object();
+        Object vehicle3 = new Object();
+        Object vehicle4 = new Object();
+        Object vehicle5 = new Object();
         try {
-            parkingLot.parkTheVehicle(vehicle, DriverType.NORMAL);
-            parkingLot.parkTheVehicle(vehicle2, DriverType.NORMAL);
-            parkingLot1.parkTheVehicle(vehicle3, DriverType.NORMAL);
-            parkingLot1.parkTheVehicle(vehicle4, DriverType.NORMAL);
-            parkingLot.unParkTheVehicle(vehicle);
-            parkingLot.parkTheVehicle(vehicle5, DriverType.NORMAL);
-            parkingSlot.setVehicleParkingSlot(vehicle5);
+            parkingLotsSystem.parkVehicle(vehicle, DriverType.NORMAL);
+            parkingLotsSystem.parkVehicle(vehicle2, DriverType.NORMAL);
+            parkingLotsSystem.parkVehicle(vehicle3, DriverType.NORMAL);
+            parkingLotsSystem.parkVehicle(vehicle4, DriverType.NORMAL);
+            parkingLotsSystem.unParkVehicle(vehicle);
+            parkingLotsSystem.parkVehicle(vehicle5, DriverType.NORMAL);
             int locationParkedVehicle = parkingLot.autoParkingLocation;
             Assert.assertEquals(4, locationParkedVehicle);
         } catch (ParkingLotException e) {
+            Assert.assertEquals(ParkingLotException.ExceptionType.PARKING_IS_FULL, e.type);
         }
     }
 
     //UC10
     @Test
-    public void givenVehicleWithHandicappedDriver_WhenParkTheVehicle_ShouldParkNearestLot() {
+    public void givenParkingLotVehicleWithHandicappedDriver_WhenParkTheVehicle_ShouldParkNearestLot() {
         parkingLot.setCapacity(5);
+        Object vehicle2 = new Object();
+        Object vehicle3 = new Object();
+        Object vehicle4 = new Object();
         try {
-            parkingLot.parkTheVehicle(vehicle2, DriverType.NORMAL);
-            parkingLot.parkTheVehicle(vehicle3, DriverType.NORMAL);
-            parkingLot.parkTheVehicle(vehicle, DriverType.HANDICAP);
-            parkingLot.unParkTheVehicle(vehicle2);
-            parkingLot.parkTheVehicle(vehicle4, DriverType.HANDICAP);
-            int findVehiclePosition = parkingLot.findVehicle(vehicle4);
+            parkingLotsSystem.parkVehicle(vehicle2, DriverType.NORMAL);
+            parkingLotsSystem.parkVehicle(vehicle3, DriverType.NORMAL);
+            parkingLotsSystem.parkVehicle(vehicle, DriverType.HANDICAP);
+            parkingLotsSystem.unParkVehicle(vehicle2);
+            parkingLotsSystem.parkVehicle(vehicle4, DriverType.HANDICAP);
+            int findVehiclePosition = parkingLotsSystem.findVehicle(vehicle4);
             Assert.assertEquals(1, findVehiclePosition);
         } catch (ParkingLotException e) {
+            Assert.assertEquals(ParkingLotException.ExceptionType.VEHICLE_NOT_FOUND, e.type);
+        }
+    }
+
+    @Test
+    public void givenParkingLotVehicleWithHandicappedDriver_WhenOneVehicleUnparked_ShouldParkedAnotherHandicappedDriverVehicle() {
+        parkingLot.setCapacity(5);
+        Object vehicle2 = new Object();
+        Object vehicle3 = new Object();
+        Object vehicle4 = new Object();
+        try {
+            parkingLotsSystem.parkVehicle(vehicle, DriverType.NORMAL);
+            parkingLotsSystem.parkVehicle(vehicle2, DriverType.HANDICAP);
+            parkingLotsSystem.parkVehicle(vehicle3, DriverType.NORMAL);
+            parkingLotsSystem.unParkVehicle(vehicle2);
+            parkingLotsSystem.parkVehicle(vehicle4, DriverType.HANDICAP);
+            int findVehiclePosition = parkingLotsSystem.findVehicle(vehicle4);
+            Assert.assertEquals(0, findVehiclePosition);
+        } catch (ParkingLotException e) {
+            Assert.assertEquals(ParkingLotException.ExceptionType.VEHICLE_NOT_FOUND, e.type);
         }
     }
 }
