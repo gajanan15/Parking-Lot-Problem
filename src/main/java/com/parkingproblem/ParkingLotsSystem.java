@@ -1,17 +1,15 @@
 package com.parkingproblem;
 
-import com.parkingproblem.enums.DriverType;
+import com.parkingproblem.enums.ParkingType;
 import com.parkingproblem.exceptions.ParkingLotException;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class ParkingLotsSystem {
     List<ParkingLot> parkingLotList;
     Informer informer;
-    boolean addLot;
+    boolean addLots;
 
     public ParkingLotsSystem() {
         informer = new Informer();
@@ -19,10 +17,10 @@ public class ParkingLotsSystem {
     }
 
     public void addLot(ParkingLot parkingLot) {
-        addLot = this.parkingLotList.add(parkingLot);
+        addLots = this.parkingLotList.add(parkingLot);
     }
 
-    public boolean parkVehicle(Object vehicle, DriverType type) {
+    public boolean parkVehicle(Object vehicle, ParkingType type) {
         ParkingLot lot = getParkingLotAvailableSpace();
         boolean parkedVehicle = lot.parkTheVehicle(vehicle, type);
         return parkedVehicle;
@@ -37,11 +35,19 @@ public class ParkingLotsSystem {
         informer.registerParkingLots(observer);
     }
 
+    public boolean isVehicleParked(Object vehicle) {
+        for (ParkingLot parkingLots : this.parkingLotList) {
+            if (parkingLots.isVehicleParked(vehicle))
+                return true;
+        }
+        throw new ParkingLotException("No Such Vehicle In Lot", ParkingLotException.ExceptionType.VEHICLE_NOT_FOUND);
+    }
+
     public boolean unParkVehicle(Object vehicle) throws ParkingLotException {
         for (ParkingLot parkingLot : this.parkingLotList) {
             return parkingLot.unParkTheVehicle(vehicle);
         }
-        throw new ParkingLotException("No Such Vehicle In Lo", ParkingLotException.ExceptionType.VEHICLE_NOT_FOUND);
+        throw new ParkingLotException("No Such Vehicle In Lot", ParkingLotException.ExceptionType.VEHICLE_NOT_FOUND);
     }
 
     public int findVehicle(Object vehicle) {

@@ -1,7 +1,7 @@
 package com.parkingproblem.mockitotest;
 
 import com.parkingproblem.*;
-import com.parkingproblem.enums.DriverType;
+import com.parkingproblem.enums.ParkingType;
 import com.parkingproblem.exceptions.ParkingLotException;
 import org.junit.Assert;
 import org.junit.Before;
@@ -10,7 +10,6 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
-import org.mockito.stubbing.Answer;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -40,8 +39,8 @@ public class ParkingLotTestMocking {
         doAnswer( invocationOnMock -> {
             parkingLotOwner.lotCapacityIsFull();
             return null;
-        }).when(parkingLot).parkTheVehicle(vehicle, DriverType.NORMAL);
-        parkingLot.parkTheVehicle(vehicle, DriverType.NORMAL);
+        }).when(parkingLot).parkTheVehicle(vehicle, ParkingType.NORMAL);
+        parkingLot.parkTheVehicle(vehicle, ParkingType.NORMAL);
         Assert.assertTrue(parkingLotOwner.isCapacityFull());
     }
 
@@ -50,15 +49,15 @@ public class ParkingLotTestMocking {
         doAnswer( invocationOnMock -> {
             parkingLotOwner.lotSpaceAvailable();
             return null;
-        }).when(parkingLot).parkTheVehicle(vehicle, DriverType.NORMAL);
-        parkingLot.parkTheVehicle(vehicle, DriverType.NORMAL);
+        }).when(parkingLot).parkTheVehicle(vehicle, ParkingType.NORMAL);
+        parkingLot.parkTheVehicle(vehicle, ParkingType.NORMAL);
         Assert.assertFalse(parkingLotOwner.isSpaceAvailable());
     }
 
     @Test
     public void givenParkingLot_WhenVehicleParked_ShouldReturnTrue() {
-        when(parkingLot.parkTheVehicle(vehicle, DriverType.NORMAL)).thenReturn(true);
-        boolean isParked = parkingLot.parkTheVehicle(this.vehicle, DriverType.NORMAL);
+        when(parkingLot.parkTheVehicle(vehicle, ParkingType.NORMAL)).thenReturn(true);
+        boolean isParked = parkingLot.parkTheVehicle(this.vehicle, ParkingType.NORMAL);
         Assert.assertTrue(isParked);
     }
 
@@ -76,8 +75,8 @@ public class ParkingLotTestMocking {
         doAnswer( invocationOnMock -> {
             airPortSecurity.lotCapacityIsFull();
             return null;
-        }).when(parkingLot).parkTheVehicle(vehicle, DriverType.NORMAL);
-        parkingLot.parkTheVehicle(vehicle, DriverType.NORMAL);
+        }).when(parkingLot).parkTheVehicle(vehicle, ParkingType.NORMAL);
+        parkingLot.parkTheVehicle(vehicle, ParkingType.NORMAL);
         Assert.assertTrue(airPortSecurity.isCapacityFull());
     }
 
@@ -86,8 +85,8 @@ public class ParkingLotTestMocking {
         doAnswer( invocationOnMock -> {
             airPortSecurity.lotSpaceAvailable();
             return null;
-        }).when(parkingLot).parkTheVehicle(vehicle, DriverType.NORMAL);
-        parkingLot.parkTheVehicle(vehicle, DriverType.NORMAL);
+        }).when(parkingLot).parkTheVehicle(vehicle, ParkingType.NORMAL);
+        parkingLot.parkTheVehicle(vehicle, ParkingType.NORMAL);
         Assert.assertTrue(airPortSecurity.isSpaceAvailable());
     }
 
@@ -96,7 +95,7 @@ public class ParkingLotTestMocking {
     @Test(expected = ParkingLotException.class)
     public void testParkingLotExceptionClass_ThrowParkingLotException_WhenCallingParkFunction() {
         doThrow(ParkingLotException.class)
-                .when(parkingLot).parkTheVehicle(any(), any(DriverType.class));
-        parkingLot.parkTheVehicle(1, DriverType.NORMAL);
+                .when(parkingLot).parkTheVehicle(any(), any(ParkingType.class));
+        parkingLot.parkTheVehicle(1, ParkingType.NORMAL);
     }
 }

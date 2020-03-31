@@ -1,9 +1,8 @@
 package com.parkingproblem;
 
-import com.parkingproblem.enums.DriverType;
+import com.parkingproblem.enums.ParkingType;
 import com.parkingproblem.exceptions.ParkingLotException;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -13,11 +12,13 @@ import java.util.stream.IntStream;
 public class ParkingLot {
     private int actualCapacity;
     private ParkingSlot parkingSlot;
+    private  ParkingLotsSystem parkingLotsSystem;
     private List<ParkingSlot> vehicles;
     public int autoParkingLocation;
     Informer informer;
 
     public ParkingLot(int capacity) {
+        parkingLotsSystem = new ParkingLotsSystem();
         informer = new Informer();
         setCapacity(capacity);
     }
@@ -34,7 +35,7 @@ public class ParkingLot {
         }
     }
 
-    public boolean parkTheVehicle(Object vehicle, DriverType type) {
+    public boolean parkTheVehicle(Object vehicle, ParkingType type) {
         parkingSlot = new ParkingSlot(vehicle);
         if (this.vehicles.size() == this.actualCapacity && !vehicles.contains(null)) {
             informer.notifyParkingIsFull();
@@ -47,12 +48,12 @@ public class ParkingLot {
         return true;
     }
 
-    public void setParkingLocation(Object vehicle, DriverType type) {
+    public void setParkingLocation(Object vehicle, ParkingType type) {
         autoParkingLocation = (int) parkingLotAttender(type);
         this.vehicles.set(autoParkingLocation, parkingSlot);
     }
 
-    public Integer parkingLotAttender(DriverType type){
+    public Integer parkingLotAttender(ParkingType type){
         if(type.HANDICAP.equals(type))
             return getEmptyParkingSlot().stream().sorted().collect(Collectors.toList()).get(0);
         return getEmptyParkingSlot().stream().sorted(Comparator.reverseOrder()).collect(Collectors.toList()).get(0);
