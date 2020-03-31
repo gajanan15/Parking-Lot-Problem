@@ -12,13 +12,11 @@ import java.util.stream.IntStream;
 public class ParkingLot {
     private int actualCapacity;
     private ParkingSlot parkingSlot;
-    private  ParkingLotsSystem parkingLotsSystem;
     private List<ParkingSlot> vehicles;
     public int autoParkingLocation;
     Informer informer;
 
     public ParkingLot(int capacity) {
-        parkingLotsSystem = new ParkingLotsSystem();
         informer = new Informer();
         setCapacity(capacity);
     }
@@ -28,15 +26,16 @@ public class ParkingLot {
         initializeParkingLot();
     }
 
+    int slot;
     public void initializeParkingLot() {
         vehicles = new ArrayList<>();
-        for (int slot = 0; slot < actualCapacity; slot++) {
+        for ( slot = 0; slot < actualCapacity; slot++) {
             vehicles.add(slot, null);
         }
     }
 
-    public boolean parkTheVehicle(Object vehicle, ParkingType type) {
-        parkingSlot = new ParkingSlot(vehicle);
+    public boolean parkTheVehicle(Vehicle vehicle, ParkingType type) {
+        parkingSlot = new ParkingSlot(vehicle,slot);
         if (this.vehicles.size() == this.actualCapacity && !vehicles.contains(null)) {
             informer.notifyParkingIsFull();
             throw new ParkingLotException("No Parking Space Available!!!", ParkingLotException.ExceptionType.PARKING_IS_FULL);
@@ -44,11 +43,11 @@ public class ParkingLot {
         if (isVehicleParked(vehicle)) {
             throw new ParkingLotException("This Vehicle Is Already Parked", ParkingLotException.ExceptionType.VEHICLE_IS_ALREADY_PARK);
         }
-        setParkingLocation(vehicle, type);
+        setParkingLocation(type);
         return true;
     }
 
-    public void setParkingLocation(Object vehicle, ParkingType type) {
+    public void setParkingLocation(ParkingType type) {
         autoParkingLocation = (int) parkingLotAttender(type);
         this.vehicles.set(autoParkingLocation, parkingSlot);
     }
@@ -60,7 +59,7 @@ public class ParkingLot {
     }
 
 
-    public boolean unParkTheVehicle(Object vehicle) {
+    public boolean unParkTheVehicle(Vehicle vehicle) {
         if (isVehicleParked(vehicle)) {
             this.vehicles.set(this.vehicles.indexOf(parkingSlot), null);
             informer.notifyParkingIsAvailable();
@@ -69,12 +68,12 @@ public class ParkingLot {
         throw new ParkingLotException("VEHICLE IS NOT AVAILABLE", ParkingLotException.ExceptionType.VEHICLE_NOT_FOUND);
     }
 
-    public boolean isVehicleParked(Object vehicle) {
-        parkingSlot = new ParkingSlot(vehicle);
+    public boolean isVehicleParked(Vehicle vehicle) {
+        parkingSlot = new ParkingSlot(vehicle,slot);
         return this.vehicles.contains(parkingSlot);
     }
 
-    public int findVehicle(Object vehicle) {
+    public int findVehicle(Vehicle vehicle) {
         if (isVehicleParked(vehicle))
             return this.vehicles.indexOf(parkingSlot);
         throw new ParkingLotException("No Such Vehicle In Lot", ParkingLotException.ExceptionType.VEHICLE_NOT_FOUND);
@@ -84,5 +83,13 @@ public class ParkingLot {
         ArrayList<Integer> emptyParkingSlots = new ArrayList();
         IntStream.range(0, this.actualCapacity).filter(slot -> vehicles.get(slot) == null).forEach(slot -> emptyParkingSlots.add(slot));
         return emptyParkingSlots;
+    }
+
+    public ArrayList<Integer> getSlotOfWhiteColorVehicle(String findByColor) {
+        ArrayList<Integer> collectSlot = vehicles.stream().filter(slot -> slot.getVehicle() != null)
+                .filter(slot -> slot.getVehicle().getColor().equals(findByColor))
+                .map(parkingSlot -> parkingSlot.getSlotNum()).collect(Collectors.toCollection(ArrayList::new));
+        collectSlot.forEach(System.out::println);
+        return collectSlot;
     }
 }

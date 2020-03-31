@@ -19,7 +19,7 @@ public class ParkingLotTestMocking {
     ParkingLot parkingLot;
     ParkingLotOwner parkingLotOwner;
     AirPortSecurityStaff airPortSecurity;
-    Object vehicle;
+    Vehicle vehicle;
 
     @Rule
     public MockitoRule mockitoRule = MockitoJUnit.rule();
@@ -29,7 +29,7 @@ public class ParkingLotTestMocking {
         parkingLot = mock(ParkingLot.class);
         parkingLotOwner = new ParkingLotOwner();
         airPortSecurity = new AirPortSecurityStaff();
-        vehicle = new Object();
+        vehicle = new Vehicle("BMW","White");
     }
 
     //Test Owner
@@ -96,6 +96,6 @@ public class ParkingLotTestMocking {
     public void testParkingLotExceptionClass_ThrowParkingLotException_WhenCallingParkFunction() {
         doThrow(ParkingLotException.class)
                 .when(parkingLot).parkTheVehicle(any(), any(ParkingType.class));
-        parkingLot.parkTheVehicle(1, ParkingType.NORMAL);
+        parkingLot.parkTheVehicle(vehicle, ParkingType.NORMAL);
     }
 }

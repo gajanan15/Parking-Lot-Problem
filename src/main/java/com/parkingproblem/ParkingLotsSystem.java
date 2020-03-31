@@ -20,7 +20,7 @@ public class ParkingLotsSystem {
         addLots = this.parkingLotList.add(parkingLot);
     }
 
-    public boolean parkVehicle(Object vehicle, ParkingType type) {
+    public boolean parkVehicle(Vehicle vehicle, ParkingType type) {
         ParkingLot lot = getParkingLotAvailableSpace();
         boolean parkedVehicle = lot.parkTheVehicle(vehicle, type);
         return parkedVehicle;
@@ -35,7 +35,7 @@ public class ParkingLotsSystem {
         informer.registerParkingLots(observer);
     }
 
-    public boolean isVehicleParked(Object vehicle) {
+    public boolean isVehicleParked(Vehicle vehicle) {
         for (ParkingLot parkingLots : this.parkingLotList) {
             if (parkingLots.isVehicleParked(vehicle))
                 return true;
@@ -43,14 +43,14 @@ public class ParkingLotsSystem {
         throw new ParkingLotException("No Such Vehicle In Lot", ParkingLotException.ExceptionType.VEHICLE_NOT_FOUND);
     }
 
-    public boolean unParkVehicle(Object vehicle) throws ParkingLotException {
+    public boolean unParkVehicle(Vehicle vehicle) throws ParkingLotException {
         for (ParkingLot parkingLot : this.parkingLotList) {
             return parkingLot.unParkTheVehicle(vehicle);
         }
         throw new ParkingLotException("No Such Vehicle In Lot", ParkingLotException.ExceptionType.VEHICLE_NOT_FOUND);
     }
 
-    public int findVehicle(Object vehicle) {
+    public int findVehicle(Vehicle vehicle) {
         for (ParkingLot parkingLot : this.parkingLotList)
             return parkingLot.findVehicle(vehicle);
         throw new ParkingLotException("No Such Vehicle In Lot", ParkingLotException.ExceptionType.VEHICLE_NOT_FOUND);

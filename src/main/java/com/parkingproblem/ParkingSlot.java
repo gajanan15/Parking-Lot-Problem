@@ -3,14 +3,20 @@ package com.parkingproblem;
 import java.time.LocalDateTime;
 
 public class ParkingSlot {
-    private Object vehicle;
+    protected Vehicle vehicle;
     public LocalDateTime parkingTime;
+    private int slotNumber;
 
-    public ParkingSlot(Object vehicle) {
+    public ParkingSlot(Vehicle vehicle,int slotNumber) {
         this.vehicle = vehicle;
+        this.slotNumber = slotNumber;
     }
 
-    public void setVehicleParkingSlot(Object vehicle) {
+    public int getSlotNum() {
+        return slotNumber;
+    }
+
+    public void setVehicleParkingSlot(Vehicle vehicle) {
         this.vehicle = vehicle;
     }
 
@@ -18,9 +24,13 @@ public class ParkingSlot {
         return parkingTime;
     }
 
-    public void setVehicleAndTime(Object vehicle) {
+    public void setVehicleAndTime(Vehicle vehicle) {
         this.vehicle = vehicle;
         this.parkingTime = LocalDateTime.now();
+    }
+
+    public Vehicle getVehicle() {
+        return vehicle;
     }
 
     @Override
