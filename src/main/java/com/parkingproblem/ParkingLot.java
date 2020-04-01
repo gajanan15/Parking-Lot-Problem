@@ -12,8 +12,9 @@ import java.util.stream.IntStream;
 public class ParkingLot {
     private int actualCapacity;
     private ParkingSlot parkingSlot;
-    private List<ParkingSlot> vehicles;
-    public int autoParkingLocation;
+    public List<ParkingSlot> vehicles;
+    private int vehicleCount;
+    public int parkingLocation;
     Informer informer;
 
     public ParkingLot(int capacity) {
@@ -26,16 +27,15 @@ public class ParkingLot {
         initializeParkingLot();
     }
 
-    int slot;
     public void initializeParkingLot() {
         vehicles = new ArrayList<>();
-        for ( slot = 0; slot < actualCapacity; slot++) {
+        for (int slot = 0; slot < actualCapacity; slot++) {
             vehicles.add(slot, null);
         }
     }
 
     public boolean parkTheVehicle(Vehicle vehicle, ParkingType type) {
-        parkingSlot = new ParkingSlot(vehicle,slot);
+        parkingSlot = new ParkingSlot(vehicle);
         if (this.vehicles.size() == this.actualCapacity && !vehicles.contains(null)) {
             informer.notifyParkingIsFull();
             throw new ParkingLotException("No Parking Space Available!!!", ParkingLotException.ExceptionType.PARKING_IS_FULL);
@@ -44,20 +44,29 @@ public class ParkingLot {
             throw new ParkingLotException("This Vehicle Is Already Parked", ParkingLotException.ExceptionType.VEHICLE_IS_ALREADY_PARK);
         }
         setParkingLocation(type);
+        vehicleCount++;
+        parkingSlot.setSlot(vehicleCount);
         return true;
     }
 
     public void setParkingLocation(ParkingType type) {
-        autoParkingLocation = (int) parkingLotAttender(type);
-        this.vehicles.set(autoParkingLocation, parkingSlot);
+        parkingLocation = parkingLotAttender(type);
+        this.vehicles.set(parkingLocation, parkingSlot);
     }
 
-    public Integer parkingLotAttender(ParkingType type){
-        if(type.HANDICAP.equals(type))
+    public Integer parkingLotAttender(ParkingType type) {
+        if (type.HANDICAP.equals(type))
             return getEmptyParkingSlot().stream().sorted().collect(Collectors.toList()).get(0);
+        if (type.LARGE.equals(type))
+            return getLargeVehicle();
         return getEmptyParkingSlot().stream().sorted(Comparator.reverseOrder()).collect(Collectors.toList()).get(0);
     }
 
+    private Integer getLargeVehicle() {
+        if (actualCapacity > vehicleCount && (actualCapacity - vehicleCount) > 2)
+            return parkingLocation - 2;
+        return getEmptyParkingSlot().stream().sorted(Comparator.reverseOrder()).collect(Collectors.toList()).get(0);
+    }
 
     public boolean unParkTheVehicle(Vehicle vehicle) {
         if (isVehicleParked(vehicle)) {
@@ -69,14 +78,14 @@ public class ParkingLot {
     }
 
     public boolean isVehicleParked(Vehicle vehicle) {
-        parkingSlot = new ParkingSlot(vehicle,slot);
+        parkingSlot = new ParkingSlot(vehicle);
         return this.vehicles.contains(parkingSlot);
     }
 
     public int findVehicle(Vehicle vehicle) {
         if (isVehicleParked(vehicle))
             return this.vehicles.indexOf(parkingSlot);
-        throw new ParkingLotException("No Such Vehicle In Lot", ParkingLotException.ExceptionType.VEHICLE_NOT_FOUND);
+        throw new ParkingLotException("No Such Vehicle In Lot", ParkingLotException.ExceptionType.NO_SUCH_VEHICLE_IN_LOT);
     }
 
     public ArrayList<Integer> getEmptyParkingSlot() {
@@ -85,11 +94,14 @@ public class ParkingLot {
         return emptyParkingSlots;
     }
 
-    public ArrayList<Integer> getSlotOfWhiteColorVehicle(String findByColor) {
-        ArrayList<Integer> collectSlot = vehicles.stream().filter(slot -> slot.getVehicle() != null)
-                .filter(slot -> slot.getVehicle().getColor().equals(findByColor))
-                .map(parkingSlot -> parkingSlot.getSlotNum()).collect(Collectors.toCollection(ArrayList::new));
-        collectSlot.forEach(System.out::println);
-        return collectSlot;
+    public List<Integer> getWhiteColorVehicleSlot(String findByColor) {
+        try {
+            List<Integer> whiteColorSlot = vehicles.stream().filter(slot -> slot.getVehicle() != null)
+                    .filter(slot -> slot.getVehicle().getColor().equals(findByColor))
+                    .map(parkingSlot -> parkingSlot.getSlotNumber()).collect(Collectors.toList());
+            return whiteColorSlot;
+        } catch (NullPointerException e) {
+            throw new ParkingLotException("No Such Vehicle In Lot", ParkingLotException.ExceptionType.NO_SUCH_VEHICLE_IN_LOT);
+        }
     }
 }

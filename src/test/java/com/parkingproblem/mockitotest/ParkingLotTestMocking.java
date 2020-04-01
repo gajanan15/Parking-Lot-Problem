@@ -29,7 +29,7 @@ public class ParkingLotTestMocking {
         parkingLot = mock(ParkingLot.class);
         parkingLotOwner = new ParkingLotOwner();
         airPortSecurity = new AirPortSecurityStaff();
-        vehicle = new Vehicle("BMW","White");
+        vehicle = new Vehicle("BMW","White","MH-04-GV-7397","Alex");
     }
 
     //Test Owner

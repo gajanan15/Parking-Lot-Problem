@@ -4,7 +4,7 @@ public class ParkingLotException extends RuntimeException {
     public ExceptionType type;
 
     public enum ExceptionType {
-        PARKING_IS_FULL, VEHICLE_IS_ALREADY_PARK, VEHICLE_NOT_FOUND, NO_VEHICLE_IN_LOT;
+        PARKING_IS_FULL, VEHICLE_IS_ALREADY_PARK, VEHICLE_NOT_FOUND, NO_SUCH_VEHICLE_IN_LOT;
     }
 
     public ParkingLotException(String message, ExceptionType type) {
