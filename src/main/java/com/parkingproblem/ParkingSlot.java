@@ -4,11 +4,14 @@ import java.time.LocalDateTime;
 
 public class ParkingSlot {
     protected Vehicle vehicle;
-    public LocalDateTime parkingTime;
+    public int parkingTime;
     public int slotNumber;
 
     public ParkingSlot(Vehicle vehicle) {
         this.vehicle = vehicle;
+    }
+
+    public ParkingSlot() {
     }
 
     public void setSlot(int slotNumber) {
@@ -23,13 +26,13 @@ public class ParkingSlot {
         this.vehicle = vehicle;
     }
 
-    public LocalDateTime getParkingTime() {
+    public int getParkingTime() {
         return parkingTime;
     }
 
     public void setVehicleAndTime(Vehicle vehicle) {
         this.vehicle = vehicle;
-        this.parkingTime = LocalDateTime.now();
+        this.parkingTime = LocalDateTime.now().getMinute();
     }
 
     public Vehicle getVehicle() {

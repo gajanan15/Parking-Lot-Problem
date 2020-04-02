@@ -43,7 +43,7 @@ public class ParkingLotsSystem {
         throw new ParkingLotException("No Such Vehicle In Lot", ParkingLotException.ExceptionType.VEHICLE_NOT_FOUND);
     }
 
-    public boolean unParkVehicle(Vehicle vehicle) throws ParkingLotException {
+    public boolean isVehicleUnparked(Vehicle vehicle) throws ParkingLotException {
         for (ParkingLot parkingLot : this.parkingLotList) {
             return parkingLot.unParkTheVehicle(vehicle);
         }

@@ -45,6 +45,7 @@ public class ParkingLot {
         }
         setParkingLocation(type);
         vehicleCount++;
+        parkingSlot.setVehicleAndTime(vehicle);
         parkingSlot.setSlot(vehicleCount);
         return true;
     }
@@ -63,8 +64,11 @@ public class ParkingLot {
     }
 
     private Integer getLargeVehicle() {
-        if (actualCapacity > vehicleCount && (actualCapacity - vehicleCount) > 2)
+        if (actualCapacity > vehicleCount && (actualCapacity - vehicleCount) > 2) {
+            if (parkingLocation <= 0)
+                return parkingLocation + 2;
             return parkingLocation - 2;
+        }
         return getEmptyParkingSlot().stream().sorted(Comparator.reverseOrder()).collect(Collectors.toList()).get(0);
     }
 
@@ -94,13 +98,25 @@ public class ParkingLot {
         return emptyParkingSlots;
     }
 
-    public List<Integer> getWhiteColorVehicleSlot(String findByColor) {
+    public List<Integer> getWhiteColorVehicleSlot(String carColor) {
         try {
             List<Integer> whiteColorSlot = vehicles.stream().filter(slot -> slot.getVehicle() != null)
-                    .filter(slot -> slot.getVehicle().getColor().equals(findByColor))
+                    .filter(slot -> slot.getVehicle().getColor().equals(carColor))
                     .map(parkingSlot -> parkingSlot.getSlotNumber()).collect(Collectors.toList());
             return whiteColorSlot;
         } catch (NullPointerException e) {
+            throw new ParkingLotException("No Such Vehicle In Lot", ParkingLotException.ExceptionType.NO_SUCH_VEHICLE_IN_LOT);
+        }
+    }
+
+    public List<Integer> getLocationOfBlueToyotaCar(String carColor, String vehicleName) {
+        try {
+            List<Integer> carColorAndName = vehicles.stream().filter(slot -> slot.getVehicle() != null)
+                    .filter(slot -> slot.getVehicle().getColor().equals(carColor) &&
+                            slot.getVehicle().getVehicleName().equals(vehicleName))
+                    .map(parkingSlot -> parkingSlot.getSlotNumber()).collect(Collectors.toList());
+            return carColorAndName;
+        } catch (Exception e) {
             throw new ParkingLotException("No Such Vehicle In Lot", ParkingLotException.ExceptionType.NO_SUCH_VEHICLE_IN_LOT);
         }
     }
