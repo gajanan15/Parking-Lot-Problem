@@ -3,6 +3,7 @@ package com.parkingproblem;
 import com.parkingproblem.enums.ParkingType;
 import com.parkingproblem.exceptions.ParkingLotException;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -65,7 +66,7 @@ public class ParkingLot {
 
     private Integer getLargeVehicle() {
         if (actualCapacity > vehicleCount && (actualCapacity - vehicleCount) > 2) {
-            if (parkingLocation <= 0)
+            if (parkingLocation == 0)
                 return parkingLocation + 2;
             return parkingLocation - 2;
         }
@@ -121,14 +122,25 @@ public class ParkingLot {
         }
     }
 
-    public List<Integer> getTotalBMWCarsParkedInLots(String carModelName){
-        try{
+    public List<Integer> getTotalBMWCarsParkedInLots(String carModelName) {
+        try {
             List<Integer> allBMWCars = vehicles.stream().filter(parkingSlot -> parkingSlot.getVehicle() != null)
                     .filter(slot -> slot.getVehicle().getVehicleName().equals(carModelName))
                     .map(parkingSlot -> parkingSlot.getSlotNumber()).collect(Collectors.toList());
             return allBMWCars;
-        }catch (NullPointerException e){
-            throw  new ParkingLotException("No Such Vehicle In Lot",ParkingLotException.ExceptionType.NO_SUCH_VEHICLE_IN_LOT);
+        } catch (NullPointerException e) {
+            throw new ParkingLotException("No Such Vehicle In Lot", ParkingLotException.ExceptionType.NO_SUCH_VEHICLE_IN_LOT);
+        }
+    }
+
+    public List<Integer> getVehicleAreParkedLast30Minutes() {
+        try {
+            List<Integer> findVehicleLast30Min = vehicles.stream().filter(parkingSlot -> parkingSlot.getVehicle() != null)
+                    .filter(slot -> ((LocalDateTime.now().getMinute() - slot.getParkingTime().getMinute()) <= 30))
+                    .map(parkingSlot -> parkingSlot.getSlotNumber()).collect(Collectors.toList());
+            return findVehicleLast30Min;
+        } catch (NullPointerException e) {
+            throw new ParkingLotException("No Such Vehicle In Lot", ParkingLotException.ExceptionType.NO_SUCH_VEHICLE_IN_LOT);
         }
     }
 }

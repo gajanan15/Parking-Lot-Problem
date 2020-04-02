@@ -16,7 +16,7 @@ public class ParkingLotTest {
     private static ParkingLotsSystem parkingLotsSystem;
     private static ParkingLotOwner owner;
     private static AirPortSecurityStaff airPortSecurity;
-    public static Vehicle vehicle, vehicle2, vehicle3, vehicle4, vehicle5;
+    private static Vehicle vehicle, vehicle2, vehicle3, vehicle4, vehicle5;
 
     @Before
     public void setUp() throws Exception {
@@ -188,10 +188,10 @@ public class ParkingLotTest {
     @Test
     public void givenParkingLot_WhenVehicleParked_ShouldSetParkingTime() {
         ParkingSlot parkingSlot = new ParkingSlot();
-        int expectedParkingTime = LocalDateTime.now().getMinute();
+        LocalDateTime expectedParkingTime = LocalDateTime.now();
         parkingSlot.setVehicleAndTime(vehicle);
-        int vehicleParkingTime = parkingSlot.getParkingTime();
-        Assert.assertEquals(expectedParkingTime, vehicleParkingTime);
+        LocalDateTime vehicleParkingTime = parkingSlot.getParkingTime();
+        Assert.assertEquals(expectedParkingTime.getMinute(), vehicleParkingTime.getMinute());
     }
 
     @Test
@@ -338,7 +338,7 @@ public class ParkingLotTest {
     }
 
     @Test
-    public void givenParkingLot_WhenLargeVehicleNotPresent_ShouldReturnNormalParking() {
+    public void givenParkingLot_WhenLargeVehicleNotPresent_ShouldNormalParkingAndReturnTrue() {
         parkingLot.setCapacity(2);
 
         ParkingLot parkingLot1 = new ParkingLot(2);
@@ -469,6 +469,32 @@ public class ParkingLotTest {
     public void givenParkingLot_WhenNoVehicleInLotAndFindListOfBMWCars_ShouldThrowException() {
         try {
             parkingLot.getTotalBMWCarsParkedInLots("BMW");
+        } catch (ParkingLotException e) {
+            Assert.assertEquals(ParkingLotException.ExceptionType.NO_SUCH_VEHICLE_IN_LOT, e.type);
+        }
+    }
+
+    //UC15
+
+    @Test
+    public void givenParkingLot_WhenHowManyVehicleAreParkedLast30Minutes_ShouldReturnTotalVehicle() {
+        parkingLot.setCapacity(4);
+        try {
+            parkingLotsSystem.parkVehicle(vehicle, ParkingType.NORMAL);
+            parkingLotsSystem.parkVehicle(vehicle2, ParkingType.NORMAL);
+            parkingLotsSystem.parkVehicle(vehicle3, ParkingType.NORMAL);
+            parkingLotsSystem.parkVehicle(vehicle4, ParkingType.NORMAL);
+            List<Integer> vehicleAreParkedLast30Minutes = parkingLot.getVehicleAreParkedLast30Minutes();
+            Assert.assertEquals(4, vehicleAreParkedLast30Minutes.size());
+        } catch (ParkingLotException e) {
+            Assert.assertEquals(ParkingLotException.ExceptionType.NO_SUCH_VEHICLE_IN_LOT, e.type);
+        }
+    }
+
+    @Test
+    public void givenParkingLot_WhenNoVehicleInLotLast30Minutes_ShouldThrowException() {
+        try {
+            parkingLot.getVehicleAreParkedLast30Minutes();
         } catch (ParkingLotException e) {
             Assert.assertEquals(ParkingLotException.ExceptionType.NO_SUCH_VEHICLE_IN_LOT, e.type);
         }
