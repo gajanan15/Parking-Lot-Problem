@@ -1,6 +1,5 @@
 package com.parkingproblem;
 
-import com.parkingproblem.enums.ParkingType;
 import com.parkingproblem.exceptions.ParkingLotException;
 
 import java.util.*;
@@ -20,9 +19,9 @@ public class ParkingLotsSystem {
         addLots = this.parkingLotList.add(parkingLot);
     }
 
-    public boolean parkVehicle(Vehicle vehicle, ParkingType type) {
+    public boolean parkVehicle(Vehicle vehicle) {
         ParkingLot lot = getParkingLotAvailableSpace();
-        boolean parkedVehicle = lot.parkTheVehicle(vehicle, type);
+        boolean parkedVehicle = lot.parkTheVehicle(vehicle);
         return parkedVehicle;
     }
 

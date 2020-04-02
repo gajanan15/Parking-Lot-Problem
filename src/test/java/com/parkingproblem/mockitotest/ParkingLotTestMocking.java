@@ -29,7 +29,7 @@ public class ParkingLotTestMocking {
         parkingLot = mock(ParkingLot.class);
         parkingLotOwner = new ParkingLotOwner();
         airPortSecurity = new AirPortSecurityStaff();
-        vehicle = new Vehicle("BMW","White","MH-04-GV-7397","Alex","Oakland");
+        vehicle = new Vehicle("BMW","White","MH-04-GV-7397","Alex","Oakland",ParkingType.NORMAL);
     }
 
     //Test Owner
@@ -39,8 +39,8 @@ public class ParkingLotTestMocking {
         doAnswer( invocationOnMock -> {
             parkingLotOwner.lotCapacityIsFull();
             return null;
-        }).when(parkingLot).parkTheVehicle(vehicle, ParkingType.NORMAL);
-        parkingLot.parkTheVehicle(vehicle, ParkingType.NORMAL);
+        }).when(parkingLot).parkTheVehicle(vehicle);
+        parkingLot.parkTheVehicle(vehicle);
         Assert.assertTrue(parkingLotOwner.isCapacityFull());
     }
 
@@ -49,15 +49,15 @@ public class ParkingLotTestMocking {
         doAnswer( invocationOnMock -> {
             parkingLotOwner.lotSpaceAvailable();
             return null;
-        }).when(parkingLot).parkTheVehicle(vehicle, ParkingType.NORMAL);
-        parkingLot.parkTheVehicle(vehicle, ParkingType.NORMAL);
+        }).when(parkingLot).parkTheVehicle(vehicle);
+        parkingLot.parkTheVehicle(vehicle);
         Assert.assertFalse(parkingLotOwner.isSpaceAvailable());
     }
 
     @Test
     public void givenParkingLot_WhenVehicleParked_ShouldReturnTrue() {
-        when(parkingLot.parkTheVehicle(vehicle, ParkingType.NORMAL)).thenReturn(true);
-        boolean isParked = parkingLot.parkTheVehicle(this.vehicle, ParkingType.NORMAL);
+        when(parkingLot.parkTheVehicle(vehicle)).thenReturn(true);
+        boolean isParked = parkingLot.parkTheVehicle(this.vehicle);
         Assert.assertTrue(isParked);
     }
 
@@ -75,8 +75,8 @@ public class ParkingLotTestMocking {
         doAnswer( invocationOnMock -> {
             airPortSecurity.lotCapacityIsFull();
             return null;
-        }).when(parkingLot).parkTheVehicle(vehicle, ParkingType.NORMAL);
-        parkingLot.parkTheVehicle(vehicle, ParkingType.NORMAL);
+        }).when(parkingLot).parkTheVehicle(vehicle);
+        parkingLot.parkTheVehicle(vehicle);
         Assert.assertTrue(airPortSecurity.isCapacityFull());
     }
 
@@ -85,8 +85,8 @@ public class ParkingLotTestMocking {
         doAnswer( invocationOnMock -> {
             airPortSecurity.lotSpaceAvailable();
             return null;
-        }).when(parkingLot).parkTheVehicle(vehicle, ParkingType.NORMAL);
-        parkingLot.parkTheVehicle(vehicle, ParkingType.NORMAL);
+        }).when(parkingLot).parkTheVehicle(vehicle);
+        parkingLot.parkTheVehicle(vehicle);
         Assert.assertTrue(airPortSecurity.isSpaceAvailable());
     }
 
@@ -95,7 +95,7 @@ public class ParkingLotTestMocking {
     @Test(expected = ParkingLotException.class)
     public void testParkingLotExceptionClass_ThrowParkingLotException_WhenCallingParkFunction() {
         doThrow(ParkingLotException.class)
-                .when(parkingLot).parkTheVehicle(any(), any(ParkingType.class));
-        parkingLot.parkTheVehicle(vehicle, ParkingType.NORMAL);
+                .when(parkingLot).parkTheVehicle(any());
+        parkingLot.parkTheVehicle(vehicle);
     }
 }
