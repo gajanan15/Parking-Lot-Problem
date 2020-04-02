@@ -11,13 +11,13 @@ public class Vehicle {
     private String vehicleName;
     private String color;
 
-    public Vehicle(String vehicleName, String color, String plateNumber, String attendantName,String location,ParkingType type) {
+    public Vehicle(String vehicleName, String color, String plateNumber, String attendantName, String location, ParkingType type) {
         this.vehicleName = vehicleName;
         this.color = color;
         this.plateNumber = plateNumber;
         this.attendantName = attendantName;
         this.location = location;
-        this.type=type;
+        this.type = type;
     }
 
     public String getColor() {
@@ -28,18 +28,15 @@ public class Vehicle {
         return vehicleName;
     }
 
-    public ParkingType type(){
+    public ParkingType type() {
         return type;
     }
+
     public String getPlateNumber() {
         return plateNumber;
     }
 
-    public String getAttendantName() {
-        return attendantName;
-    }
-
-    public String getLocation(){
+    public String getLocation() {
         return location;
     }
 }

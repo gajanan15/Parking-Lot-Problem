@@ -27,11 +27,11 @@ public class ParkingLotTest {
         owner = new ParkingLotOwner();
         parkingLotsSystem.registerParkingLots(owner);
         airPortSecurity = new AirPortSecurityStaff();
-        vehicle = new Vehicle("Maruti Suzuki", "white", "MH-04-Gv-7397", "Ara", "Washington",ParkingType.NORMAL);
-        vehicle2 = new Vehicle("BMW", "white", "MH-25-HG-2547", "Armando", "Kingston",ParkingType.NORMAL);
-        vehicle3 = new Vehicle("Mercedes", "white", "GU-26-JH-2547", "Baptiste", "Georgetown",ParkingType.NORMAL);
-        vehicle4 = new Vehicle("Toyota", "Blue", "MH-46-JT-1254", "Alex", "Kingston",ParkingType.HANDICAP);
-        vehicle5 = new Vehicle("Toyota", "Blue", "MH-04-ZW-3658", "TOM", "Washington",ParkingType.NORMAL);
+        vehicle = new Vehicle("Maruti Suzuki", "white", "MH-04-Gv-7397", "Ara", "Washington", ParkingType.NORMAL);
+        vehicle2 = new Vehicle("BMW", "white", "MH-25-HG-2547", "Armando", "Kingston", ParkingType.NORMAL);
+        vehicle3 = new Vehicle("Mercedes", "white", "GU-26-JH-2547", "Baptiste", "Georgetown", ParkingType.NORMAL);
+        vehicle4 = new Vehicle("Toyota", "Blue", "MH-46-JT-1254", "Alex", "Kingston", ParkingType.HANDICAP);
+        vehicle5 = new Vehicle("Toyota", "Blue", "MH-04-ZW-3658", "TOM", "Washington", ParkingType.NORMAL);
     }
 
     @Test
@@ -268,7 +268,7 @@ public class ParkingLotTest {
     @Test
     public void givenParkingLotVehicleWithHandicappedDriver_WhenParkTheVehicle_ShouldParkNearestLot() {
         parkingLot.setCapacity(5);
-        Vehicle vehicle6 = new Vehicle("Mahindra Scorpio", "black", "LK-25-KY-4578", "Devin", "Georgetown",ParkingType.HANDICAP);
+        Vehicle vehicle6 = new Vehicle("Mahindra Scorpio", "black", "LK-25-KY-4578", "Devin", "Georgetown", ParkingType.HANDICAP);
         try {
             parkingLotsSystem.parkVehicle(vehicle2);
             parkingLotsSystem.parkVehicle(vehicle3);
@@ -314,12 +314,12 @@ public class ParkingLotTest {
 
         parkingLotsSystem.registerParkingLots(owner);
 
-        Vehicle vehicle6 = new Vehicle("Mahindra Scorpio", "black", "LK-25-KY-4578", "Devin", "Georgetown",ParkingType.NORMAL);
-        Vehicle vehicle7 = new Vehicle("Nano", "White", "GA-12-PJ-2547", "Hugo", "Bristol",ParkingType.HANDICAP);
-        Vehicle vehicle8 = new Vehicle("Refrigerator truck", "white", "GA-58-JU-6587", "Steffen", "Chester",ParkingType.LARGE);
-        Vehicle vehicle9 = new Vehicle("Heavy hauler", "GRY", "Gk-88-JU-6567", "Adriano", "Salem",ParkingType.LARGE);
-        Vehicle vehicle10 = new Vehicle("Bugatti Veyron", "Red", "GI-58-JU-6536", "Alexei", "Oakland",ParkingType.HANDICAP);
-        Vehicle vehicle11 = new Vehicle("Tautliner", "White", "GI-58-JU-6536", "Alvaro", "Georgetown",ParkingType.LARGE);
+        Vehicle vehicle6 = new Vehicle("Mahindra Scorpio", "black", "LK-25-KY-4578", "Devin", "Georgetown", ParkingType.NORMAL);
+        Vehicle vehicle7 = new Vehicle("Nano", "White", "GA-12-PJ-2547", "Hugo", "Bristol", ParkingType.HANDICAP);
+        Vehicle vehicle8 = new Vehicle("Refrigerator truck", "white", "GA-58-JU-6587", "Steffen", "Chester", ParkingType.LARGE);
+        Vehicle vehicle9 = new Vehicle("Heavy hauler", "GRY", "Gk-88-JU-6567", "Adriano", "Salem", ParkingType.LARGE);
+        Vehicle vehicle10 = new Vehicle("Bugatti Veyron", "Red", "GI-58-JU-6536", "Alexei", "Oakland", ParkingType.HANDICAP);
+        Vehicle vehicle11 = new Vehicle("Tautliner", "White", "GI-58-JU-6536", "Alvaro", "Georgetown", ParkingType.LARGE);
         try {
             parkingLotsSystem.parkVehicle(vehicle);
             parkingLotsSystem.parkVehicle(vehicle2);
@@ -426,10 +426,10 @@ public class ParkingLotTest {
     public void givenParkingLot_WhenColorIsBlueButNotToyotaVehicle_ShouldReturnSizeZero() {
         parkingLot.setCapacity(4);
         parkingLotsSystem.registerParkingLots(owner);
-        Vehicle vehicle6 = new Vehicle("Mahindra Scorpio", "Blue", "LK-25-KY-4578", "Devin", "Georgetown",ParkingType.NORMAL);
-        Vehicle vehicle7 = new Vehicle("Nano", "White", "GA-12-PJ-2547", "Hugo", "Bristol",ParkingType.NORMAL);
-        Vehicle vehicle8 = new Vehicle("Refrigerator truck", "Blue", "GA-58-JU-6587", "Steffen", "Chester",ParkingType.NORMAL);
-        Vehicle vehicle9 = new Vehicle("Heavy hauler", "GRY", "Gk-88-JU-6567", "Adriano", "Salem",ParkingType.NORMAL);
+        Vehicle vehicle6 = new Vehicle("Mahindra Scorpio", "Blue", "LK-25-KY-4578", "Devin", "Georgetown", ParkingType.NORMAL);
+        Vehicle vehicle7 = new Vehicle("Nano", "White", "GA-12-PJ-2547", "Hugo", "Bristol", ParkingType.NORMAL);
+        Vehicle vehicle8 = new Vehicle("Refrigerator truck", "Blue", "GA-58-JU-6587", "Steffen", "Chester", ParkingType.NORMAL);
+        Vehicle vehicle9 = new Vehicle("Heavy hauler", "GRY", "Gk-88-JU-6567", "Adriano", "Salem", ParkingType.NORMAL);
         try {
             parkingLotsSystem.parkVehicle(vehicle6);
             parkingLotsSystem.parkVehicle(vehicle7);
@@ -447,7 +447,7 @@ public class ParkingLotTest {
     @Test
     public void givenParkingLot_WhenFindBMWCar_ShouldReturnTotalListOfBMWCars() {
         parkingLot.setCapacity(3);
-        Vehicle vehicle6 = new Vehicle("BMW", "Blue", "LK-25-KY-4578", "Devin", "Georgetown",ParkingType.NORMAL);
+        Vehicle vehicle6 = new Vehicle("BMW", "Blue", "LK-25-KY-4578", "Devin", "Georgetown", ParkingType.NORMAL);
         parkingLotsSystem.parkVehicle(vehicle2);
         parkingLotsSystem.parkVehicle(vehicle);
         parkingLotsSystem.parkVehicle(vehicle6);
@@ -502,23 +502,34 @@ public class ParkingLotTest {
         }
     }
 
-
     //UC16
 
     @Test
     public void givenParkingLot_WhenParkedHandicappedDriverCars_ShouldReturnLocationAndPlateNumber() {
         parkingLot.setCapacity(4);
-        Vehicle vehicle6 = new Vehicle("Mahindra Scorpio", "black", "LK-25-KY-4578", "Devin", "Georgetown",ParkingType.HANDICAP);
-        try{
-            parkingLotsSystem.parkVehicle(vehicle);
-            parkingLotsSystem.parkVehicle(vehicle2);
-            parkingLotsSystem.parkVehicle(vehicle4);
-            parkingLotsSystem.parkVehicle(vehicle6);
-            List<String> handicappedDriverDetails = parkingLot.detailsOfHandicappedDriver(ParkingType.HANDICAP);
-            List loactionAndPlateNumber = new ArrayList();
-            loactionAndPlateNumber.add("Kingston MH-46-JT-1254");
-            loactionAndPlateNumber.add("Georgetown LK-25-KY-4578");
-            Assert.assertEquals(loactionAndPlateNumber,handicappedDriverDetails);
-        }catch (ParkingLotException e){}
+        Vehicle vehicle6 = new Vehicle("Mahindra Scorpio", "black", "LK-25-KY-4578", "Devin", "Georgetown", ParkingType.HANDICAP);
+        parkingLotsSystem.parkVehicle(vehicle);
+        parkingLotsSystem.parkVehicle(vehicle2);
+        parkingLotsSystem.parkVehicle(vehicle4);
+        parkingLotsSystem.parkVehicle(vehicle6);
+        List<String> handicappedDriverDetails = parkingLot.detailsOfHandicappedDriver(ParkingType.HANDICAP);
+        List loactionAndPlateNumber = new ArrayList();
+        loactionAndPlateNumber.add("Kingston MH-46-JT-1254");
+        loactionAndPlateNumber.add("Georgetown LK-25-KY-4578");
+        Assert.assertEquals(loactionAndPlateNumber, handicappedDriverDetails);
+
+    }
+
+    //UC17
+
+    @Test
+    public void givenParkingLot_WhenVehiclesAreParked_ShouldReturnTotalVehicle() {
+        parkingLot.setCapacity(4);
+        parkingLotsSystem.parkVehicle(vehicle);
+        parkingLotsSystem.parkVehicle(vehicle2);
+        parkingLotsSystem.parkVehicle(vehicle3);
+        parkingLotsSystem.parkVehicle(vehicle4);
+        List<String> allVehicleCount = parkingLot.getAllVehicleCount();
+        Assert.assertEquals(4, allVehicleCount.size());
     }
 }

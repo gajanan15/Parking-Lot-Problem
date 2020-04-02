@@ -143,14 +143,25 @@ public class ParkingLot {
             throw new ParkingLotException("No Such Vehicle In Lot", ParkingLotException.ExceptionType.NO_SUCH_VEHICLE_IN_LOT);
         }
     }
+
     public List<String> detailsOfHandicappedDriver(ParkingType type) {
         List<String> driverDetails = new ArrayList<>();
-        for(int i=0;i<vehicles.size();i++){
-            if(vehicles.get(i) != null){
-                if(vehicles.get(i).getVehicle().type().equals(type))
-                    driverDetails.add(vehicles.get(i).getVehicle().getLocation()+" "+vehicles.get(i).getVehicle().getPlateNumber());
+        for (int i = 0; i < vehicles.size(); i++) {
+            if (vehicles.get(i) != null) {
+                if (vehicles.get(i).getVehicle().type().equals(type))
+                    driverDetails.add(vehicles.get(i).getVehicle().getLocation() + " " + vehicles.get(i).getVehicle().getPlateNumber());
             }
         }
         return driverDetails;
+    }
+
+    public List<String> getAllVehicleCount() {
+        List<String> totalVehicles = new ArrayList<>();
+        for (int i = 0; i < vehicles.size(); i++) {
+            if (vehicles.get(i) != null) {
+                totalVehicles.add(vehicles.get(i).getVehicle().getVehicleName());
+            }
+        }
+        return totalVehicles;
     }
 }
