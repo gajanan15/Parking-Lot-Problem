@@ -429,14 +429,48 @@ public class ParkingLotTest {
         Vehicle vehicle8 = new Vehicle("Refrigerator truck", "Blue", "GA-58-JU-6587", "Steffen", "Chester");
         Vehicle vehicle9 = new Vehicle("Heavy hauler", "GRY", "Gk-88-JU-6567", "Adriano", "Salem");
         try {
-            parkingLotsSystem.parkVehicle(vehicle6,ParkingType.NORMAL);
-            parkingLotsSystem.parkVehicle(vehicle7,ParkingType.NORMAL);
-            parkingLotsSystem.parkVehicle(vehicle8,ParkingType.NORMAL);
-            parkingLotsSystem.parkVehicle(vehicle9,ParkingType.NORMAL);
+            parkingLotsSystem.parkVehicle(vehicle6, ParkingType.NORMAL);
+            parkingLotsSystem.parkVehicle(vehicle7, ParkingType.NORMAL);
+            parkingLotsSystem.parkVehicle(vehicle8, ParkingType.NORMAL);
+            parkingLotsSystem.parkVehicle(vehicle9, ParkingType.NORMAL);
             List<Integer> listOfVehicles = parkingLot.getLocationOfBlueToyotaCar("Blue", "Toyota");
             Assert.assertEquals(0, listOfVehicles.size());
         } catch (ParkingLotException e) {
-            Assert.assertEquals(ParkingLotException.ExceptionType.VEHICLE_NOT_FOUND,e.type);
+            Assert.assertEquals(ParkingLotException.ExceptionType.VEHICLE_NOT_FOUND, e.type);
+        }
+    }
+
+    //UC14
+
+    @Test
+    public void givenParkingLot_WhenFindBMWCar_ShouldReturnTotalListOfBMWCars() {
+        parkingLot.setCapacity(3);
+        Vehicle vehicle6 = new Vehicle("BMW", "Blue", "LK-25-KY-4578", "Devin", "Georgetown");
+        parkingLotsSystem.parkVehicle(vehicle2, ParkingType.NORMAL);
+        parkingLotsSystem.parkVehicle(vehicle, ParkingType.NORMAL);
+        parkingLotsSystem.parkVehicle(vehicle6, ParkingType.NORMAL);
+        List<Integer> totalBMWCars = parkingLot.getTotalBMWCarsParkedInLots("BMW");
+        Assert.assertEquals(2, totalBMWCars.size());
+    }
+
+    @Test
+    public void givenParkingLot_WhenBMWCarNotParked_ShouldThrowException() {
+        parkingLot.setCapacity(2);
+        try {
+            parkingLotsSystem.parkVehicle(vehicle, ParkingType.NORMAL);
+            List<Integer> totalBMWCars = parkingLot.getTotalBMWCarsParkedInLots("BMW");
+            Assert.assertEquals(0, totalBMWCars.size());
+        } catch (ParkingLotException e) {
+            Assert.assertEquals(ParkingLotException.ExceptionType.NO_SUCH_VEHICLE_IN_LOT, e.type);
+        }
+    }
+
+    @Test
+    public void givenParkingLot_WhenNoVehicleInLotAndFindListOfBMWCars_ShouldThrowException() {
+        try {
+            parkingLot.getTotalBMWCarsParkedInLots("BMW");
+        } catch (ParkingLotException e) {
+            Assert.assertEquals(ParkingLotException.ExceptionType.NO_SUCH_VEHICLE_IN_LOT, e.type);
         }
     }
 }

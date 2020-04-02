@@ -120,4 +120,15 @@ public class ParkingLot {
             throw new ParkingLotException("No Such Vehicle In Lot", ParkingLotException.ExceptionType.NO_SUCH_VEHICLE_IN_LOT);
         }
     }
+
+    public List<Integer> getTotalBMWCarsParkedInLots(String carModelName){
+        try{
+            List<Integer> allBMWCars = vehicles.stream().filter(parkingSlot -> parkingSlot.getVehicle() != null)
+                    .filter(slot -> slot.getVehicle().getVehicleName().equals(carModelName))
+                    .map(parkingSlot -> parkingSlot.getSlotNumber()).collect(Collectors.toList());
+            return allBMWCars;
+        }catch (NullPointerException e){
+            throw  new ParkingLotException("No Such Vehicle In Lot",ParkingLotException.ExceptionType.NO_SUCH_VEHICLE_IN_LOT);
+        }
+    }
 }
