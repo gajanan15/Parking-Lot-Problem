@@ -99,69 +99,51 @@ public class ParkingLot {
         return emptyParkingSlots;
     }
 
-    public List<Integer> getWhiteColorVehicleSlot(String carColor) {
-        try {
-            List<Integer> whiteColorSlot = vehicles.stream().filter(slot -> slot.getVehicle() != null)
-                    .filter(slot -> slot.getVehicle().getColor().equals(carColor))
-                    .map(parkingSlot -> parkingSlot.getSlotNumber()).collect(Collectors.toList());
-            return whiteColorSlot;
-        } catch (NullPointerException e) {
-            throw new ParkingLotException("No Such Vehicle In Lot", ParkingLotException.ExceptionType.NO_SUCH_VEHICLE_IN_LOT);
-        }
+    public List<String> getWhiteColorVehicleSlot(String carColor) {
+        List<String> whiteColorSlot = new ArrayList<>();
+        IntStream.range(0, this.actualCapacity).filter(slot -> vehicles.get(slot) != null)
+                .filter(slot -> vehicles.get(slot).getVehicle().getColor().equals(carColor))
+                .forEach(slot -> whiteColorSlot.add(vehicles.get(slot).getVehicle().getLocation()));
+        return whiteColorSlot;
     }
 
-    public List<Integer> getLocationOfBlueToyotaCar(String carColor, String vehicleName) {
-        try {
-            List<Integer> carColorAndName = vehicles.stream().filter(slot -> slot.getVehicle() != null)
-                    .filter(slot -> slot.getVehicle().getColor().equals(carColor) &&
-                            slot.getVehicle().getVehicleName().equals(vehicleName))
-                    .map(parkingSlot -> parkingSlot.getSlotNumber()).collect(Collectors.toList());
-            return carColorAndName;
-        } catch (Exception e) {
-            throw new ParkingLotException("No Such Vehicle In Lot", ParkingLotException.ExceptionType.NO_SUCH_VEHICLE_IN_LOT);
-        }
+    public List<String> getLocationOfBlueToyotaCar(String carColor, String vehicleName) {
+        List<String> carColorAndName = new ArrayList<>();
+        IntStream.range(0, this.actualCapacity).filter(slot -> vehicles.get(slot) != null)
+                .filter(slot -> vehicles.get(slot).getVehicle().getColor().equals(carColor) &&
+                        vehicles.get(slot).getVehicle().getVehicleName().equals(vehicleName))
+                .forEach(slot -> carColorAndName.add(vehicles.get(slot).getVehicle().getLocation()));
+        return carColorAndName;
     }
 
-    public List<Integer> getTotalBMWCarsParkedInLots(String carModelName) {
-        try {
-            List<Integer> allBMWCars = vehicles.stream().filter(parkingSlot -> parkingSlot.getVehicle() != null)
-                    .filter(slot -> slot.getVehicle().getVehicleName().equals(carModelName))
-                    .map(parkingSlot -> parkingSlot.getSlotNumber()).collect(Collectors.toList());
-            return allBMWCars;
-        } catch (NullPointerException e) {
-            throw new ParkingLotException("No Such Vehicle In Lot", ParkingLotException.ExceptionType.NO_SUCH_VEHICLE_IN_LOT);
-        }
+    public List<String> getTotalBMWCarsParkedInLots(String carModelName) {
+        List<String> allBMWCars = new ArrayList<>();
+        IntStream.range(0, this.actualCapacity).filter(slot -> vehicles.get(slot) != null)
+                .filter(slot -> vehicles.get(slot).getVehicle().getVehicleName().equals(carModelName))
+                .forEach(slot -> allBMWCars.add(vehicles.get(slot).getVehicle().getLocation()));
+        return allBMWCars;
     }
 
-    public List<Integer> getVehicleAreParkedLast30Minutes() {
-        try {
-            List<Integer> findVehicleLast30Minutes = vehicles.stream().filter(parkingSlot -> parkingSlot.getVehicle() != null)
-                    .filter(slot -> ((LocalDateTime.now().getMinute() - slot.getParkingTime().getMinute()) <= 30))
-                    .map(parkingSlot -> parkingSlot.getSlotNumber()).collect(Collectors.toList());
-            return findVehicleLast30Minutes;
-        } catch (NullPointerException e) {
-            throw new ParkingLotException("No Such Vehicle In Lot", ParkingLotException.ExceptionType.NO_SUCH_VEHICLE_IN_LOT);
-        }
+    public List<String> getVehicleAreParkedLast30Minutes() {
+        List<String> findVehicleLast30Minutes = new ArrayList<>();
+        IntStream.range(0, this.actualCapacity).filter(slot -> vehicles.get(slot) != null)
+                .filter(slot -> (LocalDateTime.now().getMinute() - vehicles.get(slot).getParkingTime().getMinute()) <= 30)
+                .forEach(slot -> findVehicleLast30Minutes.add(vehicles.get(slot).getVehicle().getLocation()));
+        return findVehicleLast30Minutes;
     }
 
     public List<String> detailsOfHandicappedDriver(ParkingType type) {
         List<String> driverDetails = new ArrayList<>();
-        for (int i = 0; i < vehicles.size(); i++) {
-            if (vehicles.get(i) != null) {
-                if (vehicles.get(i).getVehicle().type().equals(type))
-                    driverDetails.add(vehicles.get(i).getVehicle().getLocation() + " " + vehicles.get(i).getVehicle().getPlateNumber());
-            }
-        }
+        IntStream.range(0, this.actualCapacity).filter(slot -> vehicles.get(slot) != null)
+                .filter(slot -> vehicles.get(slot).getVehicle().type().equals(type))
+                .forEach(slot -> driverDetails.add(vehicles.get(slot).getVehicle().getLocation() + " " + vehicles.get(slot).getVehicle().getPlateNumber()));
         return driverDetails;
     }
 
     public List<String> getAllVehicleCount() {
         List<String> totalVehicles = new ArrayList<>();
-        for (int i = 0; i < vehicles.size(); i++) {
-            if (vehicles.get(i) != null) {
-                totalVehicles.add(vehicles.get(i).getVehicle().getVehicleName());
-            }
-        }
+        IntStream.range(0, this.actualCapacity).filter(slot -> vehicles.get(slot) != null)
+                .forEach(slot -> totalVehicles.add(vehicles.get(slot).getVehicle().getVehicleName()));
         return totalVehicles;
     }
 }
