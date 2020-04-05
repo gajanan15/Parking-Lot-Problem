@@ -385,7 +385,8 @@ public class ParkingLotTest {
         parkingLotsSystem.parkVehicle(vehicle2);
         parkingLotsSystem.parkVehicle(vehicle3);
         parkingLotsSystem.parkVehicle(vehicle4);
-        List<String> carSlotList = parkingLot.getWhiteColorVehicleSlot("white");
+
+        List<String> carSlotList = parkingLot.getFieldOfVehicle("white");
         Assert.assertEquals(3, carSlotList.size());
     }
 
@@ -394,7 +395,7 @@ public class ParkingLotTest {
         parkingLot.setCapacity(3);
         parkingLotsSystem.parkVehicle(vehicle4);
         parkingLotsSystem.parkVehicle(vehicle5);
-        List<String> carSlotList = parkingLot.getWhiteColorVehicleSlot("white");
+        List<String> carSlotList = parkingLot.getFieldOfVehicle("white");
         Assert.assertEquals(0, carSlotList.size());
     }
 
@@ -435,7 +436,7 @@ public class ParkingLotTest {
         parkingLotsSystem.parkVehicle(vehicle2);
         parkingLotsSystem.parkVehicle(vehicle);
         parkingLotsSystem.parkVehicle(vehicle6);
-        List<String> totalBMWCars = parkingLot.getTotalBMWCarsParkedInLots("BMW");
+        List<String> totalBMWCars = parkingLot.getFieldOfVehicle("BMW");
         Assert.assertEquals(2, totalBMWCars.size());
     }
 
@@ -445,7 +446,7 @@ public class ParkingLotTest {
         parkingLotsSystem.parkVehicle(vehicle);
         parkingLotsSystem.parkVehicle(vehicle3);
         parkingLotsSystem.parkVehicle(vehicle4);
-        List<String> totalBMWCars = parkingLot.getTotalBMWCarsParkedInLots("BMW");
+        List<String> totalBMWCars = parkingLot.getFieldOfVehicle("BMW");
         Assert.assertEquals(0, totalBMWCars.size());
     }
 
@@ -497,5 +498,12 @@ public class ParkingLotTest {
         parkingLotsSystem.parkVehicle(vehicle4);
         List<String> allVehicleCount = parkingLot.getAllVehicleCount();
         Assert.assertEquals(4, allVehicleCount.size());
+    }
+
+    @Test
+    public void givenParkingLot_WhenNoVehicleAreParked_ShouldReturnZeroVehicle() {
+        parkingLot.setCapacity(10);
+        List<String> allVehicleCount = parkingLot.getAllVehicleCount();
+        Assert.assertEquals(0, allVehicleCount.size());
     }
 }

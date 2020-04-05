@@ -39,4 +39,10 @@ public class Vehicle {
     public String getLocation() {
         return location;
     }
+
+    public String getField(String type) {
+        if (type == "white")
+            return color;
+        return vehicleName;
+    }
 }

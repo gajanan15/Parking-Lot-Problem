@@ -11,10 +11,10 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class ParkingLot {
-    private int actualCapacity;
+    public int actualCapacity;
     private ParkingSlot parkingSlot;
     public List<ParkingSlot> vehicles;
-    private int vehicleCount;
+    public int vehicleCount;
     public int parkingLocation;
     Informer informer;
 
@@ -99,10 +99,10 @@ public class ParkingLot {
         return emptyParkingSlots;
     }
 
-    public List<String> getWhiteColorVehicleSlot(String carColor) {
+    public List<String> getFieldOfVehicle(String fieldName) {
         List<String> whiteColorSlot = new ArrayList<>();
         IntStream.range(0, this.actualCapacity).filter(slot -> vehicles.get(slot) != null)
-                .filter(slot -> vehicles.get(slot).getVehicle().getColor().equals(carColor))
+                .filter(slot -> vehicles.get(slot).getVehicle().getField(fieldName).equals(fieldName))
                 .forEach(slot -> whiteColorSlot.add(vehicles.get(slot).getVehicle().getLocation()));
         return whiteColorSlot;
     }
@@ -114,14 +114,6 @@ public class ParkingLot {
                         vehicles.get(slot).getVehicle().getVehicleName().equals(vehicleName))
                 .forEach(slot -> carColorAndName.add(vehicles.get(slot).getVehicle().getLocation()));
         return carColorAndName;
-    }
-
-    public List<String> getTotalBMWCarsParkedInLots(String carModelName) {
-        List<String> allBMWCars = new ArrayList<>();
-        IntStream.range(0, this.actualCapacity).filter(slot -> vehicles.get(slot) != null)
-                .filter(slot -> vehicles.get(slot).getVehicle().getVehicleName().equals(carModelName))
-                .forEach(slot -> allBMWCars.add(vehicles.get(slot).getVehicle().getLocation()));
-        return allBMWCars;
     }
 
     public List<String> getVehicleAreParkedLast30Minutes() {
